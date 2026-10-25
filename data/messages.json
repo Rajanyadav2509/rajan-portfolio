@@ -1,0 +1,28 @@
+[
+  {
+    "id": "70067873-81ae-4100-8594-8c7b8bfc427c",
+    "name": "Sandhya Kumari",
+    "email": "sandhya2003@gmail.com",
+    "phone": "9685181785",
+    "service": "LinkedIn content and management",
+    "message": "Hey what's bro",
+    "read": false,
+    "status": "new",
+    "starred": false,
+    "note": "",
+    "createdAt": "2026-10-25T14:25:08.384Z"
+  },
+  {
+    "id": "8a29f069-92db-492b-93e1-36d065228fd9",
+    "name": "Sonal Yadav",
+    "email": "sy2773667@gmail.com",
+    "phone": "+917705083393",
+    "service": "LinkedIn content and management",
+    "message": "Mai hu yahan ke aaoge",
+    "read": false,
+    "status": "new",
+    "starred": false,
+    "note": "",
+    "createdAt": "2026-10-25T14:24:29.670Z"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "days": {
+    "2026-10-25": {
+      "view": 5,
+      "visit": 2,
+      "dev": {
+        "desktop": 2
+      },
+      "refs": {
+        "direct": 2
+      },
+      "cta": 2,
+      "form": 3
+    }
+  }
+}
