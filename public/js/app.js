@@ -131,7 +131,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
   cd.classList.add('show');cd.setAttribute('aria-hidden','false');
   const tick=()=>{cdNum.textContent=n;cdNum.classList.remove('pop');void cdNum.offsetWidth;cdNum.classList.add('pop');
    if(cdFg)cdFg.style.strokeDashoffset=String(CIRC*(1-n/10));
-   if(n<=0){reveal();return}
+   if(n<=1){setTimeout(reveal,1000);return}
    n--;setTimeout(tick,1000)};
   tick()};
  const dismiss=()=>{if(gone)return;gone=true;
@@ -143,7 +143,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
   setTimeout(()=>{done&&done()},fast?1600:3200)};
  if(!rm)setTimeout(()=>fly(false),350);
  const auto=setTimeout(dismiss,rm?2600:4600);
- enter.addEventListener('click',e=>{e.stopPropagation();clearTimeout(auto);fly(true,dismiss)});
+ enter.addEventListener('click',e=>{e.stopPropagation();clearTimeout(auto);dismiss()});
  sp.addEventListener('click',e=>{if(e.target===sp){clearTimeout(auto);dismiss()}});
  document.addEventListener('keydown',e=>{if(gone)return;if(e.key==='Escape'){clearTimeout(auto);dismiss()}});
  enter.focus();
