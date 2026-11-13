@@ -648,8 +648,19 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 .countdown::before,.countdown::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
 .countdown::before{width:480px;height:480px;left:-120px;top:-100px;background:radial-gradient(circle,#22c55e55,transparent 65%);animation:cdFloat1 9s ease-in-out infinite}
 .countdown::after{width:420px;height:420px;right:-110px;bottom:-90px;background:radial-gradient(circle,#0ea5e955,transparent 65%);animation:cdFloat2 11s ease-in-out infinite}
-@keyframes cdFloat1{50%{transform:translate(90px,70px) scale(1.15)}}
-@keyframes cdFloat2{50%{transform:translate(-80px,-60px) scale(1.12)}}
+@keyframes cdFloat1{0%{transform:translate(0,0) scale(1);filter:blur(70px) hue-rotate(0deg)}50%{transform:translate(90px,70px) scale(1.15);filter:blur(70px) hue-rotate(130deg)}100%{transform:translate(0,0) scale(1);filter:blur(70px) hue-rotate(360deg)}}
+@keyframes cdFloat2{0%{transform:translate(0,0) scale(1);filter:blur(70px) hue-rotate(0deg)}50%{transform:translate(-80px,-60px) scale(1.12);filter:blur(70px) hue-rotate(-130deg)}100%{transform:translate(0,0) scale(1);filter:blur(70px) hue-rotate(-360deg)}}
+
+/* ===== Amazing countdown background: sweeping light lines + colour-shifting glow ===== */
+.cd-lines{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.cd-line{position:absolute;top:-25%;width:3px;height:150%;background:linear-gradient(180deg,transparent 0%,var(--c) 45%,#fff 50%,var(--c) 55%,transparent 100%);filter:blur(.5px);box-shadow:0 0 22px 3px var(--c),0 0 60px 8px color-mix(in srgb,var(--c) 55%,transparent);opacity:0;transform:rotate(22deg);animation:cdSweep 5s linear infinite}
+@keyframes cdSweep{0%{transform:rotate(22deg) translateX(-28vw);opacity:0}10%{opacity:1}85%{opacity:1}100%{transform:rotate(22deg) translateX(28vw);opacity:0}}
+.cd-glow{position:absolute;left:50%;top:50%;width:640px;height:640px;max-width:120vw;max-height:120vw;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,#22c55e2e 0%,#0ea5e922 38%,transparent 68%);filter:blur(10px);animation:cdGlowPulse 2.4s ease-in-out infinite,cdGlowHue 9s linear infinite}
+@keyframes cdGlowPulse{0%,100%{transform:translate(-50%,-50%) scale(.86);opacity:.75}50%{transform:translate(-50%,-50%) scale(1.08);opacity:1}}
+@keyframes cdGlowHue{to{filter:blur(10px) hue-rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+ .cd-line,.cd-glow{animation:none}
+}
 .countdown.show{opacity:1;visibility:visible;pointer-events:auto}
 .cd-ring{position:relative;width:180px;height:180px;z-index:1;animation:cdRingGlow 1.6s ease-in-out infinite}
 @keyframes cdRingGlow{50%{filter:drop-shadow(0 0 26px #22c55e88)}}
