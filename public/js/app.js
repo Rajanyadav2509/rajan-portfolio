@@ -118,13 +118,26 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
   if(s.banner){const d=document.createElement('div');d.className='announce';d.textContent=s.banner.text+' ';if(s.banner.link){const a=document.createElement('a');a.href=s.banner.link;a.textContent=s.banner.linkText||'Learn more';d.appendChild(a)}document.body.prepend(d);document.documentElement.style.setProperty('--ab',d.offsetHeight+'px')}}).catch(()=>{});
 })();
 
-// welcome splash overlay + flying aeroplane
-(()=>{const sp=$('#splash');if(!sp)return;const enter=$('#splashEnter'),plane=$('.splash-plane',sp);
+// welcome splash overlay + flying aeroplane, then paper-close + 10s countdown
+(()=>{const sp=$('#splash');if(!sp)return;const enter=$('#splashEnter'),plane=$('.splash-plane',sp),cd=$('#countdown'),cdNum=$('#cdNum'),cdFg=$('#cdFg');
  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
  document.body.classList.add('splash-open');
  let gone=false;
- const dismiss=()=>{if(gone)return;gone=true;sp.classList.add('hidden');document.body.classList.remove('splash-open');
-  setTimeout(()=>{sp.remove();const m=$('#main');if(m){m.setAttribute('tabindex','-1');m.focus({preventScroll:true})}},650)};
+ const reveal=()=>{if(!cd)return;cd.classList.remove('show');cd.setAttribute('aria-hidden','true');
+  sp.classList.add('hidden');document.body.classList.remove('splash-open');
+  setTimeout(()=>{sp.remove();if(cd)cd.remove();const m=$('#main');if(m){m.setAttribute('tabindex','-1');m.focus({preventScroll:true})}},650)};
+ const countdown=()=>{if(rm||!cd){reveal();return}
+  let n=10;const CIRC=326.7;
+  cd.classList.add('show');cd.setAttribute('aria-hidden','false');
+  const tick=()=>{cdNum.textContent=n;cdNum.classList.remove('pop');void cdNum.offsetWidth;cdNum.classList.add('pop');
+   if(cdFg)cdFg.style.strokeDashoffset=String(CIRC*(1-n/10));
+   if(n<=0){reveal();return}
+   n--;setTimeout(tick,1000)};
+  tick()};
+ const dismiss=()=>{if(gone)return;gone=true;
+  if(rm){reveal();return}
+  sp.classList.add('closing');
+  setTimeout(()=>{sp.classList.add('hidden');countdown()},900)};
  const fly=(fast,done)=>{if(rm||!plane){done&&done();return}
   plane.classList.remove('fly','fast');void plane.offsetWidth;if(fast)plane.classList.add('fast');plane.classList.add('fly');
   setTimeout(()=>{done&&done()},fast?1600:3200)};
