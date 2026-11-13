@@ -41,6 +41,85 @@ a{color:inherit}.mut{color:var(--mut)}.sm{font-size:.85rem}
 @media(max-width:1000px){.g4{grid-template-columns:1fr 1fr}.g2,.ml{grid-template-columns:1fr}}
 @media(max-width:760px){#login{grid-template-columns:1fr}.lv{display:none}#app{grid-template-columns:1fr}.sb{position:fixed;z-index:50;width:250px;transform:translateX(-100%);transition:transform .3s}.sb.open{transform:none}.bur{display:block}.main{padding:1rem}.top input{width:100%}.g4{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Premium admin redesign: engaging, luxurious, alive ===== */
+/* Aurora ambience + film grain over the whole app */
+#app{background:radial-gradient(900px 520px at 88% -8%,#22c55e16,transparent 60%),radial-gradient(760px 480px at -8% 108%,#0ea5e916,transparent 60%),var(--bg)}
+body::after{content:"";position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")}
+/* Sticky glass top bar */
+.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);margin:-1.4rem -1.8rem 1.3rem;padding:1rem 1.8rem;border-bottom:1px solid var(--line)}
+.top h1{background:linear-gradient(100deg,#fff 30%,#86efac 70%,#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* Sidebar: deep gradient, glowing brand, pill nav */
+.sb{background:linear-gradient(180deg,#070d1a,#05080f 55%,#07130c);border-right:1px solid #ffffff14}
+.br img{filter:drop-shadow(0 0 14px #22c55e66)}
+.br b{background:linear-gradient(90deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sb button{position:relative;overflow:hidden}
+.sb button:hover{background:#ffffff10}
+.sb button.on{background:linear-gradient(90deg,#22c55e2e,#22c55e12);color:#fff;box-shadow:inset 3px 0 0 var(--gold),0 6px 18px #22c55e22}
+.sb button.on::after{content:"";position:absolute;inset:0;background:radial-gradient(120px 40px at 20% 50%,#22c55e33,transparent 70%);pointer-events:none}
+.pill{box-shadow:0 0 12px #22c55e88}
+/* Cards: glass, gradient top-line, hover lift + glow */
+.c{background:linear-gradient(160deg,#ffffff0e,#ffffff04);border:1px solid #ffffff1e;box-shadow:0 18px 40px #00000055,inset 0 1px 0 #ffffff14;position:relative;overflow:hidden;transition:transform .25s var(--ease, ease),box-shadow .25s,border-color .25s}
+.c::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--gold),#4ade80aa,transparent);opacity:.7}
+.c:hover{transform:translateY(-2px);border-color:#22c55e44;box-shadow:0 22px 48px #00000066,0 0 0 1px #22c55e22,0 0 30px #22c55e14}
+.c h3{background:linear-gradient(90deg,#fff,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* KPI cards: icon badge, gradient number, accent */
+.k{padding-top:1.3rem}
+.k .ic{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:1.25rem;margin-bottom:.7rem;background:linear-gradient(135deg,#22c55e33,#0ea5e922);border:1px solid #22c55e33;box-shadow:0 0 18px #22c55e22}
+.k b{background:linear-gradient(120deg,#fff 40%,#86efac);-webkit-background-clip:text;background-clip:text;color:transparent}
+.k i{opacity:.10}
+.k:hover .ic{transform:scale(1.08) rotate(-4deg);box-shadow:0 0 24px #22c55e44}
+.k .ic{transition:transform .25s,box-shadow .25s}
+/* Primary buttons: rich gradient + shine sweep */
+.pri{position:relative;overflow:hidden;box-shadow:0 10px 26px #22c55e44,inset 0 1px 0 #ffffff55}
+.pri::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,#ffffff55 50%,transparent 60%);transform:translateX(-120%);transition:transform .7s ease;pointer-events:none}
+.pri:hover::after{transform:translateX(120%)}
+.pri:hover{filter:brightness(1.1)}
+button{transition:transform .18s,box-shadow .2s,background .2s,border-color .2s,filter .2s}
+/* Inputs: soft focus glow */
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px #22c55e33}
+/* Welcome hero strip on the dashboard */
+.hero-strip{position:relative;overflow:hidden;border-radius:22px;padding:1.6rem 1.8rem;margin-bottom:1.2rem;background:linear-gradient(120deg,#0b1a2e,#07130c 55%,#0b2a1a);border:1px solid #22c55e2e;box-shadow:0 24px 60px #00000066,0 0 40px #22c55e14}
+.hero-strip::before,.hero-strip::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+.hero-strip::before{width:340px;height:340px;right:-90px;top:-140px;background:#22c55e55;animation:hsFloat 9s ease-in-out infinite alternate}
+.hero-strip::after{width:280px;height:280px;left:-70px;bottom:-150px;background:#0ea5e944;animation:hsFloat 11s ease-in-out infinite alternate}
+@keyframes hsFloat{to{transform:translate(30px,24px) scale(1.12)}}
+.hero-strip h2{position:relative;font-size:1.7rem;background:linear-gradient(100deg,#fff 20%,#86efac 70%,#22c55e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-strip p{position:relative;color:#c4cde4;margin:.4rem 0 0}
+.hero-strip .qa{position:relative;display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.1rem}
+.hero-strip .qa button{background:#ffffff12;border-color:#ffffff22;color:#fff}
+.hero-strip .qa button:hover{background:#22c55e2e;border-color:#22c55e55}
+/* Message list: richer hover + selection */
+.li{transition:background .2s,border-color .2s,transform .2s}
+.li:hover{transform:translateX(3px)}
+.li.sel{background:linear-gradient(90deg,#22c55e14,transparent);border-color:var(--gold)}
+.li.un strong{font-weight:800}
+.av{box-shadow:0 4px 14px #00000055,0 0 0 2px #ffffff14}
+/* Tags + pipeline bars: glow */
+.tag{box-shadow:0 0 10px #60a5fa22}
+.bar i{box-shadow:0 0 12px #22c55e66}
+.st.on{color:var(--gold);text-shadow:0 0 12px #22c55e88}
+/* Login: richer visual panel */
+.lv{background:radial-gradient(circle at 18% 18%,#14532d,#05080f 70%),linear-gradient(160deg,#0b1a2e,#05080f)}
+.lv::before{opacity:.5}
+.lv h2{background:linear-gradient(100deg,#fff,#86efac);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lv img{filter:drop-shadow(0 0 24px #22c55e55)}
+.lf .box{animation:up .6s both}
+.err{color:var(--red)}
+/* Toasts: premium */
+.ts{border-left:4px solid var(--gold);box-shadow:0 16px 40px #00000088,0 0 0 1px #22c55e22;backdrop-filter:blur(8px)}
+/* Scrollbar + selection */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(#22c55e,#16a34a);border-radius:8px}
+::selection{background:#22c55e;color:#04120a}
+/* Staggered dashboard entrance */
+#v-dash .c{animation:up .55s both}
+#v-dash .g4 .c:nth-child(2){animation-delay:.06s}
+#v-dash .g4 .c:nth-child(3){animation-delay:.12s}
+#v-dash .g4 .c:nth-child(4){animation-delay:.18s}
+#v-dash .g2 .c:nth-child(2){animation-delay:.1s}
+
 </style></head><body>
 <main id="login"><div class="lv"><img src="/images/logo-512.png" alt=""><h2>Welcome back, Rajan.</h2><p>Your leads, visitors and site settings in one place.</p></div>
 <div class="lf"><form class="box" id="lf"><h1>Admin sign in</h1><label>Username<input id="u" autocomplete="username" required></label><label>Password<input id="p" type="password" autocomplete="current-password" required></label><p class="err" id="le" role="alert"></p><button class="pri">Sign in</button></form></div></main>
@@ -73,13 +152,14 @@ function line(ser,keys,cols){const W=700,H=220,P=28,mx=Math.max(4,...ser.flatMap
 function donut(o,cs=['#38bdf8','#22c55e','#4ade80','#f87171','#a78bfa']){const e=Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,5),t=e.reduce((a,b)=>a+b[1],0);if(!t)return '<p class="empty">No data yet</p>';let off=0;
  return `<div class="row"><svg viewBox="0 0 42 42" width="120" height="120"><circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--line)" stroke-width="6"/>${e.map(([k,v],i)=>{const p=v/t*100,s=`<circle cx="21" cy="21" r="15.9" fill="none" stroke="${cs[i]}" stroke-width="6" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${25-off}"/>`;off+=p;return s}).join('')}</svg>
  <div style="flex:1">${e.map(([k,v],i)=>`<div class="sm"><span style="color:${cs[i]}">&#9679;</span> ${esc(k)} <b>${v}</b></div>`).join('')}</div></div>`}
-function kpi(l,v,c=''){return `<div class="c k ${c}"><i></i><small>${l}</small><b data-n="${v}">0</b></div>`}
+function kpi(l,v,c='',ic=''){return `<div class="c k ${c}"><i></i>${ic?`<span class="ic">${ic}</span>`:''}<small>${l}</small><b data-n="${v}">0</b></div>`}
 function bars(o){const e=Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,6),m=e[0]?.[1]||1;return e.length?e.map(([k,v])=>`<div class="row sm" style="margin:.4rem 0"><span style="width:110px;overflow:hidden;text-overflow:ellipsis">${esc(k)}</span><div class="bar"><i style="width:${v/m*100}%"></i></div><b>${v}</b></div>`).join(''):'<p class="empty">No data yet</p>'}
 function dash(){const s=ST.series,sum=k=>s.reduce((a,d)=>a+d[k],0),wk=ALL.filter(m=>Date.now()-new Date(m.createdAt)<6048e5).length,done=ALL.filter(m=>['replied','closed'].includes(m.status)).length,hr=new Date().getHours(),sv={};ALL.forEach(m=>sv[m.service||'Other']=(sv[m.service||'Other']||0)+1);
  const pipe=Object.keys(SL).map(k=>`<div class="row sm" style="margin:.4rem 0"><span class="tag s-${k}" style="width:110px;text-align:center;white-space:nowrap">${SL[k]}</span><div class="bar"><i style="width:${ALL.length?ALL.filter(m=>m.status===k).length/ALL.length*100:0}%"></i></div><b>${ALL.filter(m=>m.status===k).length}</b></div>`).join('');
- $('#v-dash').innerHTML=`<p class="mut" style="margin:-.6rem 0 1rem">Good ${hr<12?"morning":hr<17?"afternoon":"evening"}, ${esc(USER[0].toUpperCase()+USER.slice(1))}. Here is how your site is doing.</p>
- <div class="g g4">${kpi('Total messages',ALL.length)}${kpi('Unread',ALL.filter(m=>!m.read).length,'r')}${kpi('Messages this week',wk,'b')}${kpi('Replied or closed',done,'g1')}</div>
- <div class="g g4" style="margin-top:1rem">${kpi('Page views',sum('view'),'b')}${kpi('Visitors (sessions)',sum('visit'))}${kpi('WhatsApp clicks',sum('wa'),'g1')}${kpi('Resume downloads',sum('resume'))}</div>
+ const today=new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ $('#v-dash').innerHTML=`<div class="hero-strip"><h2>Good ${hr<12?"morning":hr<17?"afternoon":"evening"}, ${esc(USER[0].toUpperCase()+USER.slice(1))}.</h2><p>${today} &middot; Here is how your site is doing.</p><div class="qa"><button onclick="go('msgs')">&#9993; Check messages</button><button id="vs2">&#8599; View website</button><button onclick="document.getElementById('rf').click()">&#8635; Refresh stats</button></div></div>
+ <div class="g g4">${kpi('Total messages',ALL.length,'','&#9993;')}${kpi('Unread',ALL.filter(m=>!m.read).length,'r','&#9679;')}${kpi('Messages this week',wk,'b','&#128197;')}${kpi('Replied or closed',done,'g1','&#10003;')}</div>
+ <div class="g g4" style="margin-top:1rem">${kpi('Page views',sum('view'),'b','&#128200;')}${kpi('Visitors (sessions)',sum('visit'),'','&#128101;')}${kpi('WhatsApp clicks',sum('wa'),'g1','&#128172;')}${kpi('Resume downloads',sum('resume'),'','&#11015;')}</div>
  <div class="g g2" style="margin-top:1rem"><div class="c"><div class="row"><h3 style="flex:1">Traffic</h3><span class="rng">${[7,30,90].map(n=>`<button data-r="${n}" class="${n==RANGE?'on':''}">${n}d</button>`).join('')}</span></div><div class="chart">${line(s,['view','visit'],['#38bdf8','#22c55e'])}</div><p class="sm mut"><span style="color:#38bdf8">&#9679;</span> Page views &nbsp;<span style="color:#22c55e">&#9679;</span> Visitors</p></div>
  <div class="c"><h3>Leads by service</h3><div style="margin-top:.8rem">${donut(sv)}</div><h3 style="margin-top:1.2rem">Lead pipeline</h3>${pipe}</div></div>
  <div class="g g2" style="margin-top:1rem"><div class="c"><h3>Recent messages</h3>${ALL.slice(0,5).map(m=>`<div class="li" data-open="${m.id}">${av(m.name)}<div class="t"><strong>${esc(m.name)}</strong> <span class="tag s-${m.status}">${SL[m.status]}</span><p>${esc(m.message)}</p></div><span class="sm mut">${ago(m.createdAt)}</span></div>`).join('')||'<p class="empty">No messages yet. Enquiries from your contact form appear here.</p>'}</div>
@@ -111,6 +191,7 @@ const go=v=>{VIEW=v;$('#sb').classList.remove('open');route()};
 async function patch(id,b){await J('messages/'+id,'PATCH',b);Object.assign(ALL.find(x=>x.id===id),b)}
 async function bulk(action,value){await J('messages/bulk','POST',{ids:[...SEL],action,value});if(action==='delete')SEL.clear();await load();toast('Done')}
 document.addEventListener('click',async e=>{const t=e.target,B=s=>t.closest(s);let x;
+ if(B('#vs2'))return open('/','_blank');
  if(x=B('[data-v]'))return go(x.dataset.v);
  if(x=B('[data-r]')){RANGE=+x.dataset.r;ST=await api('stats?days='+RANGE).then(r=>r.json());return dash()}
  if(x=B('[data-s]')){e.stopPropagation();const m=ALL.find(y=>y.id===x.dataset.s);await patch(m.id,{starred:!m.starred});return route()}
