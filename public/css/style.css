@@ -298,3 +298,46 @@ html{overflow-x:clip}
 .announce{position:fixed;top:0;left:0;right:0;z-index:90;background:var(--gg);color:var(--navy);text-align:center;font:600 .9rem "DM Sans";padding:.5rem 1rem}.announce a{color:var(--navy);text-decoration:underline;margin-left:.3rem}
 .nav{top:var(--ab,0px)}@media(max-width:760px){.nav nav{top:calc(60px + var(--ab,0px))}}
 .badge.off i{background:#f5a524;animation:none}
+
+/* ===== premium professional: animated & alive ===== */
+/* headline: per-word gradient + reveal, gold accent words (trust / found).
+   The parent h1 stays solid (no background-clip) so the words never ghost. */
+.hero h1{background:none;color:#fff;animation:rise .9s both}
+.hero h1.split{animation:rise .9s both}
+.hero h1.split .w{background:linear-gradient(180deg,#fff 30%,#b9c6e6);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(20px);animation:wordIn .8s var(--ease) forwards;animation-delay:calc(.25s + var(--i)*80ms)}
+.hero h1 .w.au{background:linear-gradient(135deg,#f3d98a,#d9b04a 50%,#b8862b);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+/* hero: drifting aurora glow + floating gold dots */
+.aurora i{animation:drift 16s ease-in-out infinite alternate;opacity:.55}
+.aurora i:nth-child(2){opacity:.4}
+.aurora i:nth-child(3){opacity:.3}
+.dots{display:block}
+/* portrait: gentle float + glowing frame */
+.portrait img{animation:bob 6s ease-in-out infinite}
+.portrait::before{animation:spinGlow 6s linear infinite;background:conic-gradient(from 0deg,#f3d98a,#2150c4,#d9b04a,#6a3fd1,#f3d98a)}
+/* buttons: shine sweep on hover + soft pulse on the gold CTA */
+.btn.gold{animation:btnPulse 2.8s infinite}
+.btn::after{display:block}
+.btn{translate:var(--bx,0) var(--by,0)}
+/* cards: cursor spotlight + gold line sweeping across the top on hover */
+.card::before,.ch::before{display:block}
+.card::after{content:"";position:absolute;left:0;top:0;height:3px;width:0;background:var(--gg);transition:width .45s var(--ease);pointer-events:none}
+.card:hover::after{width:100%}
+/* whatsapp: glowing rings back */
+.wa{animation:waGlow 2.4s infinite,waIn .7s .6s var(--ease) both}
+.wa::before,.wa::after{display:block}
+/* live tag pulse + logo ring */
+.tag{animation:tagPulse 2s infinite}
+.logo::after{display:block;animation:logoRing 4s ease-out 1.5s infinite}
+.logo:hover{transform:scale(1.1) rotate(-6deg);box-shadow:0 0 0 2px #d9b04a,0 0 26px #d9b04a88}
+/* nav brand name next to the logo */
+.brand-wrap{display:flex;align-items:center}
+.brand{display:flex;flex-direction:column;line-height:1.15;color:#fff;text-decoration:none;margin-left:.7rem}
+.brand b{font:800 1.02rem "Bricolage Grotesque";letter-spacing:-.01em}
+.brand small{font:600 .68rem "DM Sans";letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+/* hero stats: hairline dividers on desktop */
+@media(min-width:901px){.stats>div{border-left:1px solid #ffffff22;padding-left:1.4rem}.stats>div:first-child{border-left:0;padding-left:0}}
+/* hero badge: gentle float */
+.badge{animation:badgeFloat 3.2s ease-in-out infinite}
+@keyframes badgeFloat{50%{transform:translateY(-4px)}}
+/* section cards: staggered float-in already exists; add a soft glow on hover */
+.card:hover{box-shadow:0 22px 50px #0b173026,0 0 0 1px #d9b04a55}
