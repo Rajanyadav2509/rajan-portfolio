@@ -30,7 +30,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)ret
 const count=el=>{const n=+el.dataset.n,s=el.dataset.s||'',t0=performance.now();(function f(t){const p=Math.min((t-t0)/1200,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)))+(p===1?s:'');if(p<1)requestAnimationFrame(f)})(t0)};
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');$$('[data-n]',e.target).forEach(count);if(e.target.dataset.n)count(e.target);io.unobserve(e.target)}}),{threshold:.15});
 $$('.rv,.total,.stats').forEach(x=>io.observe(x));$('#yr').textContent=new Date().getFullYear();
-// contact form -> /api/contact
+// contact form -> Render API (the Vercel site is static, so the form posts to the Render back-end)
+const API='https://rajan-portfolio-38vr.onrender.com';
 const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefault();fs.className='';fs.textContent='';
  const d=Object.fromEntries(new FormData(f));let bad=false;
  $$('input,textarea',f).forEach(i=>i.classList.remove('invalid'));
@@ -38,7 +39,7 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  if(bad){fs.className='bad';fs.textContent='Please fix the highlighted fields.';return}
  const b=$('#send');b.disabled=true;b.textContent='Sending...';
  const wa=()=>{const t=encodeURIComponent(`Hi Rajan, I'm ${d.name} (${d.email}). I need help with ${d.service}: ${d.message}`);window.open('https://wa.me/917905040238?text='+t,'_blank');fs.className='ok';fs.textContent='The form could not reach the server, so WhatsApp opened with your message ready to send.';f.reset()};
- try{const c=new AbortController(),to=setTimeout(()=>c.abort(),20000);const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),signal:c.signal});clearTimeout(to);const j=await r.json();
+ try{const c=new AbortController(),to=setTimeout(()=>c.abort(),20000);const r=await fetch(API+'/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),signal:c.signal});clearTimeout(to);const j=await r.json();
   if(j.ok){fs.className='ok';fs.textContent='Thank you. Your message is sent and I will reply within one working day.';f.reset()}else if(r.status===429){fs.className='bad';fs.textContent='Too many messages sent. Please try again in a few minutes, or message me on WhatsApp.'}else{fs.className='bad';fs.textContent=j.error||'Could not send. Please try again.'}}
  catch{wa()}
  b.disabled=false;b.textContent='Send message'});
@@ -112,9 +113,9 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
 })();
 
 // visit tracking (no personal data) + availability badge and announcement bar from admin settings
-(()=>{const send=(e,x={})=>{try{const b=JSON.stringify({e,...x});navigator.sendBeacon?navigator.sendBeacon('/api/track',new Blob([b],{type:'application/json'})):fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:b,keepalive:true})}catch{}};
+(()=>{const send=(e,x={})=>{try{const b=JSON.stringify({e,...x});navigator.sendBeacon?navigator.sendBeacon(API+'/api/track',new Blob([b],{type:'application/json'})):fetch(API+'/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:b,keepalive:true})}catch{}};
  send('view');try{if(!sessionStorage.getItem('v')){sessionStorage.setItem('v','1');let ref='';try{const u=new URL(document.referrer);if(u.host!==location.host)ref=u.hostname.replace(/^www\./,'')}catch{}send('visit',{ref})}}catch{}
  document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';if(h.includes('wa.me'))send('wa');else if(/\.pdf$/.test(h))send('resume');else if(h.startsWith('mailto:'))send('email');else if(h.startsWith('tel:'))send('phone');else if(h==='#contact')send('cta')});
- fetch('/api/settings',{cache:'no-store'}).then(r=>r.json()).then(s=>{const b=$('.badge');if(b){b.lastChild.textContent=s.text;b.classList.toggle('off',!s.available)}
+ fetch(API+'/api/settings',{cache:'no-store'}).then(r=>r.json()).then(s=>{const b=$('.badge');if(b){b.lastChild.textContent=s.text;b.classList.toggle('off',!s.available)}
   if(s.banner){const d=document.createElement('div');d.className='announce';d.textContent=s.banner.text+' ';if(s.banner.link){const a=document.createElement('a');a.href=s.banner.link;a.textContent=s.banner.linkText||'Learn more';d.appendChild(a)}document.body.prepend(d);document.documentElement.style.setProperty('--ab',d.offsetHeight+'px')}}).catch(()=>{});
 })();
