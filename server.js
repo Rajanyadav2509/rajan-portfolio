@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_USER = process.env.ADMIN_USER || 'rajan';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-me';
 const SITE_URL = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
-const DB = path.join(__dirname, 'data', 'messages.json'), AN = path.join(__dirname, 'data', 'analytics.json'), ST = path.join(__dirname, 'data', 'settings.json');
+const DB = path.join(__dirname, 'data', 'messages.json'), AN = path.join(__dirname, 'data', 'analytics.json'), ST = path.join(__dirname, 'data', 'settings.json'), ADM = path.join(__dirname, 'data', 'admin.json');
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 const TZ = process.env.TZ_NAME || 'Asia/Kolkata';
 const dayKey = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
@@ -14,6 +14,16 @@ const readJ = (f, def) => { try { return JSON.parse(fs.readFileSync(f, 'utf8'));
 const writeJ = (f, v) => { const t = f + '.tmp'; fs.writeFileSync(t, JSON.stringify(v, null, 2)); fs.renameSync(t, f); };
 const DEF = { available: true, availableText: 'Available for new projects', unavailableText: 'Fully booked, taking new projects soon', banner: { on: false, text: '', link: '', linkText: '' } };
 const getSettings = () => { const s = readJ(ST, {}); return { ...DEF, ...s, banner: { ...DEF.banner, ...(s.banner || {}) } }; };
+
+// ---------- admin credentials (changeable from the admin panel) ----------
+// Stored as a SHA-256 hash in data/admin.json; falls back to the env vars.
+const sha256 = s => crypto.createHash('sha256').update(String(s)).digest('hex');
+const readAdmin = () => readJ(ADM, {});
+const getCreds = () => {
+  const a = readAdmin();
+  if (a.user && a.passHash) return { user: a.user, passHash: a.passHash };
+  return { user: ADMIN_USER, passHash: sha256(ADMIN_PASSWORD) };
+};
 let AND = readJ(AN, { days: {} }), anTimer;
 const bump = (e, extra) => { const d = (AND.days[dayKey()] ||= {}); d[e] = (d[e] || 0) + 1; if (extra) for (const [g, k] of Object.entries(extra)) { d[g] ||= {}; d[g][k] = (d[g][k] || 0) + 1; }
   clearTimeout(anTimer); anTimer = setTimeout(() => { const ks = Object.keys(AND.days).sort(); ks.slice(0, Math.max(0, ks.length - 400)).forEach(k => delete AND.days[k]); writeJ(AN, AND); }, 2000); };
@@ -97,10 +107,11 @@ const sessions = new Map(); // token -> expiry
 const safeEq = (a, b) => { const x = crypto.createHash('sha256').update(a).digest(), y = crypto.createHash('sha256').update(b).digest(); return crypto.timingSafeEqual(x, y); };
 app.post('/api/admin/login', limit(8, 15 * 60e3), (req, res) => {
   const { username = '', password = '' } = req.body || {};
-  if (safeEq(String(username), ADMIN_USER) && safeEq(String(password), ADMIN_PASSWORD)) {
+  const c = getCreds();
+  if (safeEq(String(username), c.user) && safeEq(sha256(password), c.passHash)) {
     const token = crypto.randomBytes(32).toString('hex');
     sessions.set(token, Date.now() + 8 * 3600e3);
-    return res.json({ ok: true, token, username: ADMIN_USER });
+    return res.json({ ok: true, token, username: c.user });
   }
   res.status(401).json({ ok: false, error: 'Wrong username or password.' });
 });
@@ -109,6 +120,17 @@ const auth = (req, res, next) => {
   if (t && sessions.get(t) > Date.now()) return next();
   res.status(401).json({ ok: false, error: 'Please sign in again.' });
 };
+app.post('/api/admin/credentials', auth, limit(5, 15 * 60e3), (req, res) => {
+  const b = req.body || {};
+  const c = getCreds();
+  if (!safeEq(sha256(b.currentPassword || ''), c.passHash)) return res.status(400).json({ ok: false, error: 'Current password is wrong.' });
+  const user = clean(b.username, 40), pass = String(b.password || '');
+  if (user.length < 2) return res.status(400).json({ ok: false, error: 'Username must be at least 2 characters.' });
+  if (pass.length < 6) return res.status(400).json({ ok: false, error: 'Password must be at least 6 characters.' });
+  writeJ(ADM, { user, passHash: sha256(pass), updatedAt: new Date().toISOString() });
+  sessions.clear();
+  res.json({ ok: true, username: user });
+});
 app.get('/api/admin/messages', auth, (req, res) => res.json({ ok: true, messages: read() }));
 const STATUSES = ['new', 'in_progress', 'replied', 'closed'];
 app.patch('/api/admin/messages/:id', auth, (req, res) => {
