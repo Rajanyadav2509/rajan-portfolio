@@ -701,3 +701,12 @@ body::after{content:"";position:fixed;inset:0;z-index:300;pointer-events:none;op
 
 /* ===== Hide portfolio data until the timer completes ===== */
 body.splash-open #main,body.splash-open .nav,body.splash-open footer,body.splash-open .wa,body.splash-open .skip{visibility:hidden}
+
+/* ===== Portfolio open: cinematic zoom-in-to-zoom-out reveal ===== */
+body.portfolio-open #main{animation:portfolioZoom 1s cubic-bezier(.2,.7,.25,1) both}
+@keyframes portfolioZoom{from{opacity:0;transform:scale(1.1)}to{opacity:1;transform:scale(1)}}
+body.portfolio-open .nav,body.portfolio-open footer{animation:portfolioFade .8s ease both}
+@keyframes portfolioFade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+ body.portfolio-open #main,body.portfolio-open .nav,body.portfolio-open footer{animation:none}
+}
