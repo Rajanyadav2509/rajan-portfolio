@@ -578,8 +578,9 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 .card>svg.ic{width:2.6rem;height:2.6rem;padding:.65rem;border-radius:50%;background:var(--acc);color:#05080f;margin-bottom:.9rem}
 /* How I work steps: icon chip replaces the number */
 .steps:not(.row){list-style:none;padding-left:0}
-.steps:not(.row) li{display:flex;align-items:center;gap:.7rem}
-.steps:not(.row) svg.ic{width:2rem;height:2rem;padding:.45rem;border-radius:50%;background:#22c55e1a;color:var(--acc);border:1px solid #22c55e40}
+.steps:not(.row) li{display:flex;align-items:flex-start;gap:.7rem}
+.steps:not(.row) li>span{flex:1;min-width:0;line-height:1.5}
+.steps:not(.row) svg.ic{flex:none;width:2rem;height:2rem;padding:.45rem;border-radius:50%;background:#22c55e1a;color:var(--acc);border:1px solid #22c55e40;margin-top:.1rem}
 /* YouTube process cards */
 .steps.row svg.ic{display:block;width:2.2rem;height:2.2rem;padding:.5rem;border-radius:50%;background:var(--acc);color:#05080f;margin-bottom:.6rem}
 /* skills: icon before the name */
