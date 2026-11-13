@@ -20,7 +20,7 @@ img{max-width:100%;height:auto;display:block}a{color:inherit}.wrap{width:min(112
 .hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;align-items:center}
 .kicker{color:var(--gold);font-weight:700;margin:0 0 1rem}.lead{font-size:1.2rem;color:#d3dbee;max-width:34em}.cta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.8rem}
 .portrait{margin:0;justify-self:center;position:relative;width:min(380px,80%);animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
-.portrait::before{content:"";position:absolute;inset:-14px 14px 14px -14px;border:3px solid var(--gold);border-radius:28px;z-index:0}
+.portrait::before{content:"";position:absolute;inset:-18% -22%;background:radial-gradient(ellipse at center,rgba(34,197,94,.38) 0%,rgba(34,197,94,.14) 45%,transparent 70%);filter:blur(28px);border-radius:50%;z-index:0}
 .portrait img{position:relative;border-radius:24px;width:100%;aspect-ratio:3/4;object-fit:cover;z-index:1;box-shadow:0 24px 60px #0008}@keyframes rise{from{opacity:0;transform:translateY(30px)}}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3.5rem;border-top:1px solid #ffffff2b;padding-top:2rem}
 .stats b{display:block;font:800 clamp(2rem,4vw,3rem) "Bricolage Grotesque";color:var(--gold);line-height:1}.stats span{color:#c4cde4;font-size:.95rem}
@@ -74,8 +74,8 @@ footer{background:#05080f10;background:#05080f;color:#aab5d0;padding:1.5rem 0;fo
 .badge i{width:9px;height:9px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 #3ddc8488;animation:pulse 2s infinite}@keyframes pulse{70%{box-shadow:0 0 0 10px #3ddc8400}}
 .hero h1{font-size:clamp(2.6rem,6.4vw,5rem);background:linear-gradient(180deg,#fff 30%,#a7f3d0);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .9s both}
 .role{font-size:1.15rem;color:#e6ecfa;margin:0 0 .8rem}.role b{color:var(--gold)}.rot{color:var(--gold);border-right:2px solid var(--gold);padding-right:3px;animation:blink 1s step-end infinite}@keyframes blink{50%{border-color:transparent}}
-.portrait{width:min(400px,84%);perspective:900px;transition:transform .2s}.portrait::before{background:var(--gg);inset:-3px;border:0;border-radius:30px;opacity:.8;filter:blur(1px)}
-.portrait img{box-shadow:0 30px 80px #000a;border:6px solid #05080f}
+.portrait{width:min(400px,84%);perspective:900px;transition:transform .2s}
+.portrait img{box-shadow:0 24px 60px #00000066;border:1px solid #ffffff14}
 .stats{margin-top:3rem;border-top:1px solid #ffffff22}
 .marq{overflow:hidden;margin-top:2rem;border-block:1px solid #ffffff1c;background:#ffffff08;padding:.9rem 0;position:relative;z-index:2}
 .marq div{display:flex;gap:3rem;width:max-content;animation:scroll 32s linear infinite}.marq span{color:#9fb0d6;font:700 1.05rem "Bricolage Grotesque";white-space:nowrap}.marq span::before{content:"\2726";color:var(--gold);margin-right:3rem}
@@ -99,7 +99,6 @@ h2{position:relative;padding-bottom:.5em}h2::after{content:"";position:absolute;
 @keyframes shine{50%{background-position:100% 0}}
 .hero .badge{animation:rise .8s .1s both}.hero .role{animation:rise .8s .3s both}.hero .lead{animation:rise .8s .45s both}.hero .cta{animation:rise .8s .6s both}
 .portrait img{animation:bob 6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-10px)}}
-.portrait::before{animation:spinGlow 6s linear infinite;background:conic-gradient(from 0deg,#86efac,#15803d,#22c55e,#0d9488,#86efac)}@keyframes spinGlow{to{filter:blur(6px) hue-rotate(360deg)}}
 .btn.gold{animation:btnPulse 2.8s infinite}@keyframes btnPulse{0%,100%{box-shadow:0 8px 24px #22c55e55}50%{box-shadow:0 8px 34px #22c55eaa,0 0 0 6px #22c55e22}}
 .logo{transition:transform .3s}.logo:hover{transform:rotate(-8deg) scale(1.1)}
 h2::after{width:0;transition:width .9s .2s cubic-bezier(.2,.8,.2,1)}h2.in::after{width:64px}
@@ -140,7 +139,7 @@ h1,h2,h3{letter-spacing:-.025em}h2{font-size:clamp(1.8rem,3.4vw,2.5rem);padding-
 /* calmer motion */
 .hero h1{animation:rise .8s both}
 .portrait img{animation:none}
-.portrait::before{animation:none;background:var(--gg);filter:none;opacity:.9}
+.portrait::before{animation:none}
 .btn.gold{animation:none;box-shadow:0 6px 18px #22c55e40}
 .btn.gold:hover{box-shadow:0 10px 26px #22c55e60}
 .btn{letter-spacing:.01em}
@@ -260,8 +259,7 @@ footer .fl img{box-shadow:none;width:44px;height:44px}
 @keyframes waGlow{0%{box-shadow:0 0 0 0 #25d366aa,0 0 18px #25d36688,0 8px 24px #0006}70%{box-shadow:0 0 0 18px #25d36600,0 0 34px #25d366cc,0 8px 24px #0006}100%{box-shadow:0 0 0 0 #25d36600,0 0 18px #25d36688,0 8px 24px #0006}}
 @keyframes waRing{from{transform:scale(1);opacity:.8}to{transform:scale(1.9);opacity:0}}
 @keyframes waIn{from{opacity:0;transform:scale(0)}}
-.contact .wa-link{display:inline-flex;align-items:center;gap:.5rem}.contact .wa-link::before{content:"";width:10px;height:10px;border-radius:50%;background:#25d366;animation:pulse2 1.6s infinite}
-@keyframes pulse2{0%{box-shadow:0 0 0 0 #25d366aa}100%{box-shadow:0 0 0 10px #25d36600}}
+.contact .wa-link{display:inline-flex;align-items:center;gap:.5rem}
 .totop{bottom:92px}
 @media(max-width:520px){.wa{right:14px;bottom:14px;width:54px;height:54px}.wa svg{width:28px;height:28px}.wa .tip{display:none}.totop{bottom:80px}}
 @media(prefers-reduced-motion:reduce){.wa{animation:none}.wa::before,.wa::after{display:none}}
@@ -311,9 +309,8 @@ html{overflow-x:clip}
 .aurora i:nth-child(2){opacity:.4}
 .aurora i:nth-child(3){opacity:.3}
 .dots{display:block}
-/* portrait: gentle float + glowing frame */
+/* portrait: gentle float */
 .portrait img{animation:bob 6s ease-in-out infinite}
-.portrait::before{animation:spinGlow 6s linear infinite;background:conic-gradient(from 0deg,#86efac,#15803d,#22c55e,#0d9488,#86efac)}
 /* buttons: shine sweep on hover + soft pulse on the gold CTA */
 .btn.gold{animation:btnPulse 2.8s infinite}
 .btn::after{display:block}
@@ -387,7 +384,7 @@ caption{color:var(--tx)}
 /* hero cluster: stat card + portrait + badge + stat */
 .hero-grid{grid-template-columns:1.25fr 1fr;gap:2.5rem}
 .hero-cluster{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:stretch}
-.hero-cluster .portrait{width:100%;justify-self:stretch;margin:0}
+.hero-cluster .portrait{grid-column:1/-1;width:100%;justify-self:stretch;margin:0}
 .hc-card{background:linear-gradient(160deg,#0e1830,#0a0f1c);border:1px solid var(--bd);border-radius:20px;padding:1.4rem;display:flex;flex-direction:column;justify-content:center;gap:.35rem;box-shadow:0 16px 40px #00000040;transition:transform .3s,border-color .3s,box-shadow .3s}
 .hc-card:hover{transform:translateY(-4px);border-color:#22c55e55;box-shadow:0 24px 50px #00000050}
 .hc-card b{font:800 clamp(2.2rem,4vw,3.1rem)/1 "Bricolage Grotesque";color:var(--acc);letter-spacing:-.02em}
@@ -572,3 +569,38 @@ body.splash-open{overflow:hidden}
  .skills .skill{transition-delay:0s}
  #education .tl li{transition-delay:0s}
 }
+
+/* ===== Icons (inline SVG sprite) ===== */
+svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
+/* service icon inside the green chip */
+.svc .ic svg{width:1.5rem;height:1.5rem;display:block}
+/* icon chip on value + system cards */
+.card>svg.ic{width:2.6rem;height:2.6rem;padding:.65rem;border-radius:50%;background:var(--acc);color:#05080f;margin-bottom:.9rem}
+/* How I work steps: icon chip replaces the number */
+.steps:not(.row){list-style:none;padding-left:0}
+.steps:not(.row) li{display:flex;align-items:center;gap:.7rem}
+.steps:not(.row) svg.ic{width:2rem;height:2rem;padding:.45rem;border-radius:50%;background:#22c55e1a;color:var(--acc);border:1px solid #22c55e40}
+/* YouTube process cards */
+.steps.row svg.ic{display:block;width:2.2rem;height:2.2rem;padding:.5rem;border-radius:50%;background:var(--acc);color:#05080f;margin-bottom:.6rem}
+/* skills: icon before the name */
+.skill-name{display:inline-flex;align-items:center;gap:.55rem}
+/* education year + icon */
+.tl .yr{display:inline-flex;align-items:center;gap:.5rem}
+/* contact list */
+.contact li{display:flex;align-items:center;gap:.6rem}
+.contact li svg.ic{width:18px;height:18px}
+
+/* ===== Education: pronounced left-entry ===== */
+#education .tl li{transform:translateX(-72px);opacity:0;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+#education .tl li.in{opacity:1;transform:none}
+#education .tl li:nth-child(2){transition-delay:.18s}
+#education .tl li:nth-child(3){transition-delay:.36s}
+@media(max-width:900px){#education .tl li{transform:translateX(-40px)}}
+@media(prefers-reduced-motion:reduce){#education .tl li{transform:none;opacity:1;transition:none}}
+
+/* ===== About: portrait + soft spotlight behind the photos ===== */
+.about-grid{grid-template-columns:280px 1fr 1fr;align-items:start}
+.about-photo{margin:0;position:relative}
+.about-photo img{position:relative;z-index:1;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:20px;border:1px solid #ffffff14;box-shadow:0 24px 60px #00000066;display:block}
+.about-photo::before{content:"";position:absolute;inset:-18% -22%;background:radial-gradient(ellipse at center,rgba(34,197,94,.38) 0%,rgba(34,197,94,.14) 45%,transparent 70%);filter:blur(28px);border-radius:50%;z-index:0}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}.about-photo{width:min(280px,80%);justify-self:center}}
