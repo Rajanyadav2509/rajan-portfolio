@@ -124,7 +124,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
  document.body.classList.add('splash-open');
  let gone=false;
  const reveal=()=>{if(!cd)return;cd.classList.remove('show');cd.setAttribute('aria-hidden','true');
-  sp.classList.add('hidden');document.body.classList.remove('splash-open');
+  sp.classList.add('hidden');document.body.classList.remove('splash-open');document.body.classList.add('portfolio-open');
   setTimeout(()=>{sp.remove();if(cd)cd.remove();const m=$('#main');if(m){m.setAttribute('tabindex','-1');m.focus({preventScroll:true})}},650)};
  const countdown=()=>{if(rm||!cd){reveal();return}
   let n=10;const CIRC=326.7;
