@@ -22,8 +22,6 @@ $('#more').innerHTML=[['Akhilesh Ji','12 packs','Excel and Power BI tutorials','
 // lightbox
 const lb=$('#lb'),lbi=$('img',lb);document.addEventListener('click',e=>{const z=e.target.closest('[data-zoom]');if(z){lbi.src=z.dataset.zoom;lbi.alt=$('img',z)?.alt||'';lb.hidden=false;$('#lbx').focus()}else if(e.target===lb||e.target.id==='lbx')lb.hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
-// nav
-const burger=$('#burger'),menu=$('#menu');burger.onclick=()=>{const o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o)};menu.onclick=e=>{if(e.target.tagName==='A'){menu.classList.remove('open');burger.setAttribute('aria-expanded',false)}};
 // button ripple
 document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rip';const d=Math.max(r.width,r.height);s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(s);setTimeout(()=>s.remove(),600)});
 // reveal + counters
@@ -55,9 +53,6 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  $$('.card:not(.rv),.total,.faq details,.tablewrap,.steps.row li').forEach(x=>x.classList.add('rv','zoom'));
  $$('h2').forEach(x=>x.classList.add('rv'));
  $$('.rv:not(.in)').forEach(x=>io.observe(x));
- const links=$$('#menu a[href^="#"]:not(.btn)'),secs=links.map(a=>$(a.getAttribute('href'))).filter(Boolean);
- const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
- secs.forEach(s=>so.observe(s));
 })();
 
 // nav gets a solid state after scrolling
