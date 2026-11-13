@@ -643,7 +643,7 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 @media(max-width:900px){.sys-steps{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.sys-steps{grid-template-columns:1fr}}
 
-/* ===== 10-second countdown after welcome ===== */
+/* ===== 5-second countdown after welcome ===== */
 .countdown{position:fixed;inset:0;z-index:210;display:grid;place-items:center;align-content:center;gap:1.4rem;background:#05080f;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),visibility .45s}
 .countdown::before,.countdown::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
 .countdown::before{width:480px;height:480px;left:-120px;top:-100px;background:radial-gradient(circle,#22c55e55,transparent 65%);animation:cdFloat1 9s ease-in-out infinite}
