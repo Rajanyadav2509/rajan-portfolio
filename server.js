@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_USER = process.env.ADMIN_USER || 'rajan';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-me';
 const SITE_URL = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
-const DB = path.join(__dirname, 'data', 'messages.json'), AN = path.join(__dirname, 'data', 'analytics.json'), ST = path.join(__dirname, 'data', 'settings.json'), ADM = path.join(__dirname, 'data', 'admin.json');
+const DB = path.join(__dirname, 'data', 'messages.json'), AN = path.join(__dirname, 'data', 'analytics.json'), ST = path.join(__dirname, 'data', 'settings.json'), ADM = path.join(__dirname, 'data', 'admin.json'), PF = path.join(__dirname, 'data', 'profile.json');
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 const TZ = process.env.TZ_NAME || 'Asia/Kolkata';
 const dayKey = (d = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
@@ -14,6 +14,10 @@ const readJ = (f, def) => { try { return JSON.parse(fs.readFileSync(f, 'utf8'));
 const writeJ = (f, v) => { const t = f + '.tmp'; fs.writeFileSync(t, JSON.stringify(v, null, 2)); fs.renameSync(t, f); };
 const DEF = { available: true, availableText: 'Available for new projects', unavailableText: 'Fully booked, taking new projects soon', banner: { on: false, text: '', link: '', linkText: '' } };
 const getSettings = () => { const s = readJ(ST, {}); return { ...DEF, ...s, banner: { ...DEF.banner, ...(s.banner || {}) } }; };
+
+// ---------- profile (edited from the admin panel) ----------
+const DEF_PROFILE = { name: 'Rajan Yadav', title: 'Social Media Manager', bio: 'LinkedIn content and YouTube SEO for founders, creators and professionals.', email: 'yaduvanshirajan228@gmail.com', phone: '+91 79050 40238', whatsapp: '917905040238', linkedin: 'https://www.linkedin.com/in/rajan-yadav-9638452a5', location: 'Bhavnagar, Gujarat, India' };
+const getProfile = () => ({ ...DEF_PROFILE, ...readJ(PF, {}) });
 
 // ---------- admin credentials (changeable from the admin panel) ----------
 // Stored as a SHA-256 hash in data/admin.json; falls back to the env vars.
@@ -156,6 +160,19 @@ app.get('/api/admin/stats', auth, (req, res) => {
   res.json({ ok: true, days: n, series, refs, devices: dev });
 });
 app.get('/api/admin/settings', auth, (req, res) => res.json({ ok: true, settings: getSettings() }));
+app.get('/api/admin/profile', auth, (req, res) => res.json({ ok: true, profile: getProfile() }));
+app.put('/api/admin/profile', auth, (req, res) => {
+  const b = req.body || {}, p = getProfile();
+  p.name = clean(b.name, 80) || DEF_PROFILE.name;
+  p.title = clean(b.title, 80);
+  p.bio = clean(b.bio, 300);
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.email || '')) p.email = clean(b.email, 120);
+  p.phone = clean(b.phone, 30);
+  p.whatsapp = clean(b.whatsapp, 30).replace(/\D/g, '');
+  if (/^(https?:\/\/)?(www\.)?linkedin\.com\//.test(b.linkedin || '')) p.linkedin = clean(b.linkedin, 300);
+  p.location = clean(b.location, 120);
+  writeJ(PF, p); res.json({ ok: true, profile: p });
+});
 app.put('/api/admin/settings', auth, (req, res) => {
   const b = req.body || {}, bn = b.banner || {}, s = getSettings();
   s.available = !!b.available; s.availableText = clean(b.availableText, 80) || DEF.availableText; s.unavailableText = clean(b.unavailableText, 80) || DEF.unavailableText;
