@@ -32,6 +32,28 @@ app.use((req, res, next) => {
   next();
 });
 
+// ---------- CORS: allow the Vercel static front-end to use this API ----------
+const ALLOWED_ORIGINS = new Set([
+  'https://rajan-portfolio-lemon.vercel.app',
+  'https://rajan-portfolio-38vr.onrender.com',
+  'http://localhost:3123',
+  'http://localhost:3000',
+]);
+app.use((req, res, next) => {
+  const o = req.get('origin');
+  if (o && ALLOWED_ORIGINS.has(o)) res.set('Access-Control-Allow-Origin', o);
+  res.set('Vary', 'Origin');
+  if (req.method === 'OPTIONS' && req.path.startsWith('/api/')) {
+    res.set({
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    });
+    return res.status(204).end();
+  }
+  next();
+});
+
 // ---------- rate limiting ----------
 const hits = new Map();
 const limit = (max, windowMs) => (req, res, next) => {
