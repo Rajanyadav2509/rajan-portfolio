@@ -1,5 +1,5 @@
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)],I='/images/';
-const services=[['Social media management','Planning, publishing, scheduling and day-to-day support.'],['LinkedIn content and marketing','Content built for professional audiences and personal brands.'],['Content strategy','Pillars, topics, hooks, formats, CTAs and calendars.'],['Personal branding','Turn expertise and opinions into a clear professional identity.'],['Content creation and design','Text posts, carousels, educational graphics, promo creatives.'],['Audience engagement','Thoughtful comments and ongoing relationship-building.'],['Promotional communication','Outreach and promotional DMs that fit the brand.'],['YouTube SEO packs','Titles, descriptions, hashtags, tags, thumbnail text, summaries.'],['Newsletter and Substack management','Grow a newsletter from zero — a client Substack I built now has around 100 subscribers.']];
+const services=[['Social media management','Planning, publishing and day-to-day support.'],['LinkedIn content and marketing','Content for professional audiences and personal brands.'],['Content strategy','Pillars, topics, hooks, formats, CTAs and calendars.'],['Personal branding','Expertise turned into a clear professional identity.'],['Content creation and design','Text posts, carousels, educational graphics, promo creatives.'],['Audience engagement','Thoughtful comments that build relationships.'],['Promotional communication','Outreach and promotional DMs that fit the brand.'],['YouTube SEO packs','Titles, descriptions, hashtags, tags, thumbnail text, summaries.'],['Newsletter and Substack management','Grow a newsletter from zero — one I built now has ~100 subscribers.']];
 $('#svc').innerHTML=services.map((s,i)=>`<article class="card rv"><h3><span class="ic">${'&#9733;&#9998;&#9881;&#9823;&#9674;&#9993;&#9873;&#9654;'.split(';').filter(Boolean)[i]||'&#9733;'};</span>${s[0]}</h3><p>${s[1]}</p></article>`).join('');
 const car=[
 {t:'Carousel 01: Consistency',f:'Alexx Roy, 5 slides',e:[24,15,2,'153 impressions'],s:['cover','1','2','3','close'],p:'c1',live:'c1-live',alt:'Consistency carousel slide'},
@@ -11,9 +11,9 @@ return `<div class="cb rv" id="car-${k+1}"><div class="cb-head"><div><h3>${c.t}<
 <div class="track-wrap"><button class="arr l" aria-label="Previous slides" data-d="-1">&#8249;</button><div class="track" tabindex="0">${sl}${lv}</div><button class="arr r" aria-label="Next slides" data-d="1">&#8250;</button></div></div>`}).join('');
 $$('.arr').forEach(b=>b.onclick=()=>{const t=$('.track',b.parentElement);t.scrollBy({left:b.dataset.d*t.clientWidth*.8,behavior:'smooth'})});
 const ch=[
-{n:'Himanshu Agrawaal',c:36,img:'yt-himanshu',d:'Business growth, systems and founder productivity. @thehimanshuagrawaal',snap:'6.4K subscribers, 894 videos, 689K lifetime views',w:['Titles, descriptions, hashtags, tags, thumbnail text and summaries for 36 videos.','Topics: business systems, scaling, sales funnels, ads, mindset.','Keywords for founders, e.g. business scaling strategy, CEO productivity, delegation.'],pk:'Stop being the bottleneck',ti:['How to Run a Business Without Being There | CEO System Explained','Build a Business That Runs Without You (CEO Productivity System)'],th:'Business Without You, CEO System Secret, Stop Being Bottleneck, Smart CEO Strategy',tg:'how to build a business system, how to run business without owner, remove bottleneck in business operations, how ceos delegate work effectively',h:'#businesssystems #entrepreneurmindset #ceoproductivity #delegation'},
-{n:'Vedastram',c:15,img:'yt-vedastram',d:"India's animated universe of ancient Indian knowledge. @Vedastram",snap:'14.5K subscribers, 184 videos, 381K lifetime views',w:['15 SEO packs for animated stories and explainers on Indian knowledge.','Topics: vrat and fasting, temple science, Ayurveda, yoga, Gurukul, Satvik living.','Bilingual Hindi and English keywords for parents, kids and curious learners.'],pk:'Real meaning of vrat',ti:['Real Meaning of Vrat Explained | Moral Story for Kids','Why Do We Fast? Science + Moral Story for Kids'],th:'Real Meaning Vrat, Fasting Secret Kids, Vrat Story Lesson, Self Control Story',tg:'vrat meaning for kids hindi, vrat kya hota hai simple explanation, fasting moral story for kids hindi, hindi kahani',h:'#moralstory #kidsstory #vrat #fasting #hindistories'},
-{n:'HiveStrat | HR as CEO',c:13,img:'yt-hivestrat',d:'HR leadership podcast turning HR into a profit engine. @HiveStratHR',snap:'275 subscribers, 85 videos, new episode every Tuesday',w:['13 SEO packs for HR as CEO podcast episodes and clips.','Topics: onboarding, HR metrics, KPIs, execution, culture, retention.','Keywords for HR leaders and founders, e.g. employee retention, 30-60-90 day plan.'],pk:'The 90-day hiring mistake',ti:['Why New Employees Quit in 90 Days (Fix This Onboarding Mistake)','The 90-Day Onboarding Framework Every Company Should Use'],th:'90-Day Hiring Mistake, Onboarding System Secret, Why Employees Quit, Fix Your Onboarding',tg:'how to reduce employee turnover in first 90 days, employee onboarding process for new hires, 30 60 90 day onboarding plan explained',h:'#onboarding #hrstrategy #employeeretention #workplaceculture'}];
+{n:'Himanshu Agrawaal',c:36,img:'yt-himanshu',d:'Business growth, systems and founder productivity. @thehimanshuagrawaal',snap:'6.4K subscribers, 894 videos, 689K lifetime views',w:['SEO packs for 36 videos.','Business systems, scaling, sales funnels, ads, mindset.','Keywords for founders: scaling, CEO productivity, delegation.'],pk:'Stop being the bottleneck',ti:['How to Run a Business Without Being There | CEO System Explained','Build a Business That Runs Without You (CEO Productivity System)'],th:'Business Without You, CEO System Secret, Stop Being Bottleneck, Smart CEO Strategy',tg:'how to build a business system, how to run business without owner, remove bottleneck in business operations, how ceos delegate work effectively',h:'#businesssystems #entrepreneurmindset #ceoproductivity #delegation'},
+{n:'Vedastram',c:15,img:'yt-vedastram',d:"India's animated universe of ancient Indian knowledge. @Vedastram",snap:'14.5K subscribers, 184 videos, 381K lifetime views',w:['SEO packs for 15 animated stories and explainers.','Vrat, temple science, Ayurveda, yoga, Gurukul, Satvik living.','Hindi–English keywords for parents, kids and learners.'],pk:'Real meaning of vrat',ti:['Real Meaning of Vrat Explained | Moral Story for Kids','Why Do We Fast? Science + Moral Story for Kids'],th:'Real Meaning Vrat, Fasting Secret Kids, Vrat Story Lesson, Self Control Story',tg:'vrat meaning for kids hindi, vrat kya hota hai simple explanation, fasting moral story for kids hindi, hindi kahani',h:'#moralstory #kidsstory #vrat #fasting #hindistories'},
+{n:'HiveStrat | HR as CEO',c:13,img:'yt-hivestrat',d:'HR leadership podcast turning HR into a profit engine. @HiveStratHR',snap:'275 subscribers, 85 videos, new episode every Tuesday',w:['SEO packs for 13 podcast episodes and clips.','Onboarding, HR metrics, KPIs, execution, culture, retention.','Keywords for HR leaders: retention, 30-60-90 day plan.'],pk:'The 90-day hiring mistake',ti:['Why New Employees Quit in 90 Days (Fix This Onboarding Mistake)','The 90-Day Onboarding Framework Every Company Should Use'],th:'90-Day Hiring Mistake, Onboarding System Secret, Why Employees Quit, Fix Your Onboarding',tg:'how to reduce employee turnover in first 90 days, employee onboarding process for new hires, 30 60 90 day onboarding plan explained',h:'#onboarding #hrstrategy #employeeretention #workplaceculture'}];
 $('#yt').innerHTML=ch.map(c=>`<article class="ch rv" id="${['ch-himanshu','ch-vedastram','ch-hivestrat'][ch.indexOf(c)]}"><button class="shot" data-zoom="${I}${c.img}.jpg" aria-label="Enlarge ${c.n} channel screenshot"><img loading="lazy" src="${I}${c.img}.jpg" alt="YouTube channel screenshot of ${c.n}" width="1345" height="798"></button>
 <div><span class="n">${c.c} SEO packs delivered</span><h3>${c.n}</h3><small>${c.d}<br>Channel snapshot: ${c.snap}</small><ul>${c.w.map(x=>`<li>${x}</li>`).join('')}</ul>
 <div class="pk"><h4>Sample pack: ${c.pk}</h4><p><b>Titles:</b> ${c.ti.join(' / ')}</p><p><b>Thumbnail text:</b> ${c.th}</p><p><b>Tags:</b> ${c.tg}</p><p><b>Hashtags:</b> ${c.h}</p></div></div></article>`).join('');
@@ -22,6 +22,8 @@ $('#more').innerHTML=[['Akhilesh Ji','12 packs','Excel and Power BI tutorials','
 // lightbox
 const lb=$('#lb'),lbi=$('img',lb);document.addEventListener('click',e=>{const z=e.target.closest('[data-zoom]');if(z){lbi.src=z.dataset.zoom;lbi.alt=$('img',z)?.alt||'';lb.hidden=false;$('#lbx').focus()}else if(e.target===lb||e.target.id==='lbx')lb.hidden=true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
+// nav
+const burger=$('#burger'),menu=$('#menu');burger.onclick=()=>{const o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o)};menu.onclick=e=>{if(e.target.tagName==='A'){menu.classList.remove('open');burger.setAttribute('aria-expanded',false)}};
 // button ripple
 document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rip';const d=Math.max(r.width,r.height);s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;b.appendChild(s);setTimeout(()=>s.remove(),600)});
 // reveal + counters
@@ -53,6 +55,9 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  $$('.card:not(.rv),.total,.faq details,.tablewrap,.steps.row li').forEach(x=>x.classList.add('rv','zoom'));
  $$('h2').forEach(x=>x.classList.add('rv'));
  $$('.rv:not(.in)').forEach(x=>io.observe(x));
+ const links=$$('#menu a[href^="#"]:not(.btn)'),secs=links.map(a=>$(a.getAttribute('href'))).filter(Boolean);
+ const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+ secs.forEach(s=>so.observe(s));
 })();
 
 // nav gets a solid state after scrolling
@@ -69,7 +74,7 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  const tl=$('.tl');if(tl)io.observe(tl);
  if(!rm){
   // cursor spotlight on cards
-  if(hov)document.addEventListener('mousemove',e=>{const c=e.target.closest&&e.target.closest('.card,.ch');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
+  if(hov)document.addEventListener('mousemove',e=>{const c=e.target.closest&&e.target.closest('.card,.ch,.client,.cb,.total');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')},{passive:true});
   // magnetic buttons
   if(hov){document.addEventListener('mousemove',e=>{const b=e.target.closest&&e.target.closest('.btn:not([disabled])');if(!b)return;const r=b.getBoundingClientRect();b.style.setProperty('--bx',((e.clientX-r.left-r.width/2)*.18)+'px');b.style.setProperty('--by',((e.clientY-r.top-r.height/2)*.28)+'px')},{passive:true});
    document.addEventListener('mouseout',e=>{const b=e.target.closest&&e.target.closest('.btn');if(b&&!b.contains(e.relatedTarget)){b.style.setProperty('--bx','0px');b.style.setProperty('--by','0px')}})}
@@ -112,4 +117,22 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
  document.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const h=a.getAttribute('href')||'';if(h.includes('wa.me'))send('wa');else if(/\.pdf$/.test(h))send('resume');else if(h.startsWith('mailto:'))send('email');else if(h.startsWith('tel:'))send('phone');else if(h==='#contact')send('cta')});
  fetch(API+'/api/settings',{cache:'no-store'}).then(r=>r.json()).then(s=>{const b=$('.badge');if(b){b.lastChild.textContent=s.text;b.classList.toggle('off',!s.available)}
   if(s.banner){const d=document.createElement('div');d.className='announce';d.textContent=s.banner.text+' ';if(s.banner.link){const a=document.createElement('a');a.href=s.banner.link;a.textContent=s.banner.linkText||'Learn more';d.appendChild(a)}document.body.prepend(d);document.documentElement.style.setProperty('--ab',d.offsetHeight+'px')}}).catch(()=>{});
+})();
+
+// welcome splash overlay + flying aeroplane
+(()=>{const sp=$('#splash');if(!sp)return;const enter=$('#splashEnter'),plane=$('.splash-plane',sp);
+ const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ document.body.classList.add('splash-open');
+ let gone=false;
+ const dismiss=()=>{if(gone)return;gone=true;sp.classList.add('hidden');document.body.classList.remove('splash-open');
+  setTimeout(()=>{sp.remove();const m=$('#main');if(m){m.setAttribute('tabindex','-1');m.focus({preventScroll:true})}},650)};
+ const fly=(fast,done)=>{if(rm||!plane){done&&done();return}
+  plane.classList.remove('fly','fast');void plane.offsetWidth;if(fast)plane.classList.add('fast');plane.classList.add('fly');
+  setTimeout(()=>{done&&done()},fast?1600:3200)};
+ if(!rm)setTimeout(()=>fly(false),350);
+ const auto=setTimeout(dismiss,rm?2600:4600);
+ enter.addEventListener('click',e=>{e.stopPropagation();clearTimeout(auto);fly(true,dismiss)});
+ sp.addEventListener('click',e=>{if(e.target===sp){clearTimeout(auto);dismiss()}});
+ document.addEventListener('keydown',e=>{if(gone)return;if(e.key==='Escape'){clearTimeout(auto);dismiss()}});
+ enter.focus();
 })();
