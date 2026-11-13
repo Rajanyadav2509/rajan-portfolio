@@ -120,18 +120,58 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 #v-dash .g4 .c:nth-child(4){animation-delay:.18s}
 #v-dash .g2 .c:nth-child(2){animation-delay:.1s}
 
+/* ===== More admin options: Tasks, Content, accent picker ===== */
+/* Task + content rows */
+.tk{display:flex;gap:.7rem;align-items:center;padding:.7rem .6rem;border-radius:12px;border:1px solid transparent;transition:background .2s,transform .2s}
+.tk:hover{background:var(--bg);transform:translateX(3px)}
+.tk.done{opacity:.6}
+.tk.done .tt{text-decoration:line-through}
+.tk .tt{flex:1;min-width:0}
+.tk input[type=checkbox]{width:20px;height:20px;accent-color:var(--gold);cursor:pointer;flex:none;padding:0}
+.tk .due{font-size:.8rem;color:var(--mut);white-space:nowrap}
+.tk .x{background:none;border:0;color:var(--mut);font-size:1.1rem;padding:.2rem .5rem}
+.tk .x:hover{color:var(--red)}
+.addrow{display:flex;gap:.5rem;margin-bottom:.9rem}
+.addrow input{flex:1}
+.addrow select{width:auto}
+.chip{display:inline-block;border-radius:999px;padding:.1rem .7rem;font-size:.75rem;font-weight:700}
+.chip.idea{background:#60a5fa1f;color:#60a5fa}
+.chip.draft{background:#f59e0b1f;color:#f59e0b}
+.chip.ready{background:#22c55e1f;color:#22c55e}
+.chip.posted{background:#64748b26;color:var(--mut)}
+/* Accent picker */
+.acc-sw{display:flex;gap:.6rem;flex-wrap:wrap}
+.acc-sw button{width:38px;height:38px;border-radius:50%;padding:0;border:2px solid transparent;box-shadow:0 4px 14px #00000055}
+.acc-sw button.on{border-color:#fff;box-shadow:0 0 0 3px var(--gold),0 0 16px #22c55e66}
+.acc-sw button:hover{transform:scale(1.12)}
+/* Clock */
+#clock{font-weight:700;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.35rem .9rem}
+/* Sidebar PRO badge */
+.br small{color:#8fa2cc}
+.pro-badge{display:inline-block;margin-top:.35rem;background:linear-gradient(135deg,#4ade80,#22c55e);color:#04120a;font-size:.68rem;font-weight:800;letter-spacing:.08em;border-radius:999px;padding:.15rem .6rem}
+
 </style></head><body>
 <main id="login"><div class="lv"><img src="/images/logo-512.png" alt=""><h2>Welcome back, Rajan.</h2><p>Your leads, visitors and site settings in one place.</p></div>
 <div class="lf"><form class="box" id="lf"><h1>Admin sign in</h1><label>Username<input id="u" autocomplete="username" required></label><label>Password<input id="p" type="password" autocomplete="current-password" required></label><p class="err" id="le" role="alert"></p><button class="pri">Sign in</button></form></div></main>
-<div id="app" hidden><aside class="sb" id="sb"><div class="br"><img src="/images/logo-192.png" alt=""><div><b>Rajan Yadav</b><small>Admin dashboard</small></div></div>
-<button data-v="dash">&#9638; Dashboard</button><button data-v="msgs">&#9993; Messages <span class="pill" id="unp" hidden></span></button><button data-v="prof">&#128100; Profile</button><button data-v="set">&#9881; Settings</button><div class="sp"></div>
+<div id="app" hidden><aside class="sb" id="sb"><div class="br"><img src="/images/logo-192.png" alt=""><div><b>Rajan Yadav</b><small>Admin dashboard</small><br><span class="pro-badge">PRO</span></div></div>
+<button data-v="dash">&#9638; Dashboard</button><button data-v="msgs">&#9993; Messages <span class="pill" id="unp" hidden></span></button><button data-v="tasks">&#10003; Tasks <span class="pill" id="tkp" hidden></span></button><button data-v="content">&#9998; Content <span class="pill" id="ctp" hidden></span></button><button data-v="prof">&#128100; Profile</button><button data-v="set">&#9881; Settings</button><div class="sp"></div>
 <button id="vs">&#8599; View website</button><button id="out">&#8629; Sign out</button></aside>
-<div class="main"><div class="top"><button class="bur" id="bur" aria-label="Menu">&#9776;</button><h1 id="ttl">Dashboard</h1><input id="q" placeholder="Search messages..." aria-label="Search"><button id="th" title="Toggle dark mode">&#9680;</button><button id="rf" title="Refresh">&#8635;</button></div>
-<section id="v-dash"></section><section id="v-msgs" hidden></section><section id="v-prof" hidden></section><section id="v-set" hidden></section></div></div><div id="toasts"></div>
+<div class="main"><div class="top"><button class="bur" id="bur" aria-label="Menu">&#9776;</button><h1 id="ttl">Dashboard</h1><span class="sm mut" id="clock" style="white-space:nowrap"></span><input id="q" placeholder="Search messages..." aria-label="Search"><button id="th" title="Toggle dark mode">&#9680;</button><button id="rf" title="Refresh">&#8635;</button></div>
+<section id="v-dash"></section><section id="v-msgs" hidden></section><section id="v-tasks" hidden></section><section id="v-content" hidden></section><section id="v-prof" hidden></section><section id="v-set" hidden></section></div></div><div id="toasts"></div>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let T=sessionStorage.getItem('t'),USER=sessionStorage.getItem('u')||'admin',ALL=[],ST=null,SET=null,PROF=null,RANGE=30,VIEW='dash',FILT='all',SVC='',SEL=new Set(),CUR=null;
 const SL={new:'New',in_progress:'In progress',replied:'Replied',closed:'Closed'};
+/* Tasks + Content ideas: stored in this browser (localStorage) */
+const store=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');localStorage.setItem(k,JSON.stringify(v))}catch{return null}};
+let TASKS=store('adm-tasks')||[],IDEAS=store('adm-content')||[],CFILT='all';
+const saveTasks=()=>{store('adm-tasks',TASKS);updBadges()};
+const saveIdeas=()=>{store('adm-content',IDEAS);updBadges()};
+function updBadges(){const tk=TASKS.filter(t=>!t.done).length,ci=IDEAS.filter(i=>i.status!=='posted').length;const a=$('#tkp'),b=$('#ctp');if(a){a.hidden=!tk;a.textContent=tk}if(b){b.hidden=!ci;b.textContent=ci}}
+/* Accent colour: green / blue / purple / gold / pink */
+const ACCENTS={green:'#22c55e',blue:'#38bdf8',purple:'#a78bfa',gold:'#f59e0b',pink:'#f472b6'};
+function applyAccent(name){const c=ACCENTS[name]||ACCENTS.green;document.documentElement.style.setProperty('--gold',c);localStorage.setItem('adm-accent',name);$$('.acc-sw button').forEach(b=>b.classList.toggle('on',b.dataset.acc===name))}
+function clockTick(){const el=$('#clock');if(!el)return;const d=new Date();el.textContent=d.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'})+'  ·  '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
 document.documentElement.dataset.t=localStorage.getItem('adm-t')||'dark';
 function toast(m){const d=document.createElement('div');d.className='ts';d.textContent=m;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),2800)}
 async function api(p,o={}){const r=await fetch('/api/admin/'+p,{...o,headers:{'Content-Type':'application/json',Authorization:'Bearer '+T}});if(r.status===401){signout();throw 0}return r}
@@ -178,20 +218,40 @@ function detail(m){const ph=(m.phone||'').replace(/\D/g,''),wa=ph?(ph.length===1
  <div class="acts"><a href="mailto:${esc(m.email)}?subject=Re: your enquiry"><button class="pri" data-st="replied" data-id="${m.id}">Reply by email</button></a>${wa?`<a href="https://wa.me/${wa}" target="_blank" rel="noopener"><button data-st="replied" data-id="${m.id}">Reply on WhatsApp</button></a>`:''}<button data-cp="${esc(m.email)}">Copy email</button><button data-rd="${m.id}">Mark ${m.read?'unread':'read'}</button><button class="dan" data-del="${m.id}">Delete</button></div>
  <h3 style="font-size:1rem">Status</h3><div class="stp" style="margin:.5rem 0 1rem">${Object.entries(SL).map(([k,v])=>`<button data-st="${k}" data-id="${m.id}" class="${m.status===k?'on':''}">${v}</button>`).join('')}</div>
  <h3 style="font-size:1rem">Private notes</h3><textarea id="nt" rows="4" placeholder="Budget, follow-up date, ideas..." data-id="${m.id}">${esc(m.note)}</textarea>`}
-function sett(){const s=SET,b=s.banner;$('#v-set').innerHTML=`<div class="g g2"><div class="c"><h3>Availability badge</h3><p class="mut sm">Controls the badge on your homepage hero.</p><div class="fm"><label class="sw"><input type="checkbox" id="av" ${s.available?'checked':''}> Available for new projects</label><label>Text when available<input id="at" value="${esc(s.availableText)}" maxlength="80"></label><label>Text when booked<input id="ut" value="${esc(s.unavailableText)}" maxlength="80"></label></div></div>
+function sett(){const s=SET,b=s.banner;const acc=localStorage.getItem('adm-accent')||'green';
+ $('#v-set').innerHTML=`<div class="g g2"><div class="c"><h3>Appearance</h3><p class="mut sm">Pick the accent colour for this dashboard. It stays on this device.</p><div class="acc-sw">${Object.entries(ACCENTS).map(([n,c])=>`<button data-acc="${n}" class="${n===acc?'on':''}" style="background:${c}" title="${n}" aria-label="${n} accent"></button>`).join('')}</div></div>
+ <div class="c"><h3>Availability badge</h3><p class="mut sm">Controls the badge on your homepage hero.</p><div class="fm"><label class="sw"><input type="checkbox" id="av" ${s.available?'checked':''}> Available for new projects</label><label>Text when available<input id="at" value="${esc(s.availableText)}" maxlength="80"></label><label>Text when booked<input id="ut" value="${esc(s.unavailableText)}" maxlength="80"></label></div></div>
  <div class="c"><h3>Announcement bar</h3><p class="mut sm">A slim bar at the top of your website (offers, launches, holidays).</p><div class="fm"><label class="sw"><input type="checkbox" id="bo" ${b.on?'checked':''}> Show announcement</label><label>Message<input id="bt" value="${esc(b.text)}" maxlength="200"></label><label>Link (optional, https:// or #section)<input id="bl" value="${esc(b.link)}"></label><label>Link text<input id="bk" value="${esc(b.linkText)}" maxlength="40"></label></div></div></div>
  <p><button class="pri" id="ss">Save settings</button></p>
  <div class="c" style="margin-top:1rem"><h3>Data and backups</h3><p class="mut sm">Download your messages, analytics and settings any time.</p><div class="acts"><button id="csv">Messages (CSV)</button><button id="jsn">Full backup (JSON)</button></div></div>
  <div class="c" style="margin-top:1rem"><h3>Account</h3><p class="mut sm">Signed in as <b>${esc(USER)}</b>. Sessions last 8 hours. Change your sign-in below — it takes effect immediately and signs you out, so sign in again with the new details.</p><div class="fm"><label>Current password<input id="cp" type="password" autocomplete="current-password"></label><label>New username<input id="nu" value="${esc(USER)}" maxlength="40"></label><label>New password (min 6 characters)<input id="np" type="password" autocomplete="new-password"></label><label>Confirm new password<input id="nc" type="password" autocomplete="new-password"></label><p class="err" id="ce" role="alert"></p><p><button class="pri" id="cs">Save new sign-in</button></p></div></div>`}
 function prof(){const p=PROF||{};$('#v-prof').innerHTML=`<div class="g g2"><div class="c"><div class="row" style="align-items:flex-start"><img src="/images/rajan.jpg" alt="Profile photo" style="width:96px;height:128px;object-fit:cover;border-radius:16px;border:1px solid var(--line);flex:none"><div style="flex:1;min-width:0"><h2 style="font-size:1.4rem">${esc(p.name||'')}</h2><p class="mut" style="margin:.2rem 0 0">${esc(p.title||'')}</p><p class="sm mut" style="margin:.3rem 0 0">${esc(p.location||'')}</p>${p.linkedin?`<p class="sm" style="margin:.5rem 0 0"><a href="${esc(p.linkedin)}" target="_blank" rel="noopener">LinkedIn profile</a></p>`:''}</div></div><p class="mut sm" style="margin:1rem 0 0">This is how your profile appears on your website. The photo is your current portfolio picture.</p></div>
 <div class="c"><h3>Edit profile</h3><div class="fm" style="margin-top:.8rem"><label>Display name<input id="pn" value="${esc(p.name||'')}" maxlength="80"></label><label>Title / role<input id="pt" value="${esc(p.title||'')}" maxlength="80"></label><label>Short bio<textarea id="pb" rows="3" maxlength="300">${esc(p.bio||'')}</textarea></label><label>Email<input id="pe2" type="email" value="${esc(p.email||'')}" maxlength="120"></label><label>Phone<input id="pp" value="${esc(p.phone||'')}" maxlength="30"></label><label>WhatsApp number (country code, digits only)<input id="pw" value="${esc(p.whatsapp||'')}" maxlength="30"></label><label>LinkedIn URL<input id="pl" value="${esc(p.linkedin||'')}" maxlength="300"></label><label>Location<input id="ploc" value="${esc(p.location||'')}" maxlength="120"></label><p class="err" id="perr" role="alert"></p><p><button class="pri" id="sp">Save profile</button></p></div></div></div>`}
-function route(){const t={dash:'Dashboard',msgs:'Messages',prof:'Profile',set:'Settings'};VIEW=t[VIEW]?VIEW:'dash';$('#ttl').textContent=t[VIEW];$$('.sb [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===VIEW));
- ['dash','msgs','prof','set'].forEach(v=>$('#v-'+v).hidden=v!==VIEW);$('#q').hidden=VIEW!=='msgs';({dash,msgs,prof,set:sett}[VIEW])()}
+function tasks(){const open=TASKS.filter(t=>!t.done).length;
+ $('#v-tasks').innerHTML=`<div class="c"><h3>Tasks &amp; follow-ups</h3><p class="mut sm">Your personal to-do list. Saved in this browser.</p>
+ <div class="addrow"><input id="tk-in" placeholder="Add a task — e.g. Reply to Amarendra, post the carousel..." aria-label="New task"><input id="tk-due" type="date" style="width:auto" aria-label="Due date"><button class="pri" id="tk-add">Add</button></div>
+ <p class="sm mut">${open} open &middot; ${TASKS.length-open} done</p>
+ ${TASKS.map((t,i)=>`<div class="tk ${t.done?'done':''}"><input type="checkbox" data-tk="${i}" ${t.done?'checked':''} aria-label="Done"><span class="tt">${esc(t.text)}</span>${t.due?`<span class="due">${esc(t.due)}</span>`:''}<button class="x" data-tx="${i}" aria-label="Delete">&times;</button></div>`).join('')||'<p class="empty">No tasks yet. Add your first follow-up above.</p>'}</div>`}
+const CST={idea:'Idea',draft:'Draft',ready:'Ready',posted:'Posted'};
+function content(){const rows=IDEAS.filter(i=>CFILT==='all'||i.status===CFILT);
+ $('#v-content').innerHTML=`<div class="c"><h3>Content ideas</h3><p class="mut sm">Plan LinkedIn posts, carousels and videos. Saved in this browser.</p>
+ <div class="addrow"><input id="ci-in" placeholder="Post idea — e.g. 3 mistakes founders make on LinkedIn..." aria-label="New idea"><select id="ci-pl" aria-label="Platform"><option>LinkedIn</option><option>Instagram</option><option>YouTube</option><option>Substack</option><option>X</option></select><button class="pri" id="ci-add">Add idea</button></div>
+ <div class="fl">${['all','idea','draft','ready','posted'].map(f=>`<button data-cf="${f}" class="${f===CFILT?'on':''}">${f==='all'?'All':CST[f]}</button>`).join('')}</div>
+ ${rows.map((it,i)=>{const idx=IDEAS.indexOf(it);return `<div class="tk"><span class="tt"><strong>${esc(it.title)}</strong> <span class="sm mut">${esc(it.platform)}</span></span><span class="chip ${it.status}">${CST[it.status]}</span><select data-cs="${idx}" style="width:auto" aria-label="Status">${Object.entries(CST).map(([k,v])=>`<option value="${k}" ${it.status===k?'selected':''}>${v}</option>`).join('')}</select><button class="x" data-cx="${idx}" aria-label="Delete">&times;</button></div>`}).join('')||'<p class="empty">No ideas yet. Add your first post idea above.</p>'}</div>`}
+function route(){const t={dash:'Dashboard',msgs:'Messages',tasks:'Tasks',content:'Content',prof:'Profile',set:'Settings'};VIEW=t[VIEW]?VIEW:'dash';$('#ttl').textContent=t[VIEW];$$('.sb [data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===VIEW));
+ ['dash','msgs','tasks','content','prof','set'].forEach(v=>$('#v-'+v).hidden=v!==VIEW);$('#q').hidden=VIEW!=='msgs';({dash,msgs,tasks,content,prof,set:sett}[VIEW])()}
 const go=v=>{VIEW=v;$('#sb').classList.remove('open');route()};
 async function patch(id,b){await J('messages/'+id,'PATCH',b);Object.assign(ALL.find(x=>x.id===id),b)}
 async function bulk(action,value){await J('messages/bulk','POST',{ids:[...SEL],action,value});if(action==='delete')SEL.clear();await load();toast('Done')}
 document.addEventListener('click',async e=>{const t=e.target,B=s=>t.closest(s);let x;
  if(B('#vs2'))return open('/','_blank');
+ if(B('#tk-add')){const inp=$('#tk-in'),txt=inp.value.trim();if(!txt)return;TASKS.unshift({text:txt,due:$('#tk-due').value||'',done:false});saveTasks();return tasks()}
+ if(x=B('[data-tk]')){TASKS[+x.dataset.tk].done=x.checked;saveTasks();return tasks()}
+ if(x=B('[data-tx]')){TASKS.splice(+x.dataset.tx,1);saveTasks();return tasks()}
+ if(B('#ci-add')){const inp=$('#ci-in'),txt=inp.value.trim();if(!txt)return;IDEAS.unshift({title:txt,platform:$('#ci-pl').value,status:'idea'});saveIdeas();return content()}
+ if(x=B('[data-cf]')){CFILT=x.dataset.cf;return content()}
+ if(x=B('[data-cx]')){IDEAS.splice(+x.dataset.cx,1);saveIdeas();return content()}
+ if(x=B('[data-acc]')){applyAccent(x.dataset.acc);return toast('Accent updated')}
  if(x=B('[data-v]'))return go(x.dataset.v);
  if(x=B('[data-r]')){RANGE=+x.dataset.r;ST=await api('stats?days='+RANGE).then(r=>r.json());return dash()}
  if(x=B('[data-s]')){e.stopPropagation();const m=ALL.find(y=>y.id===x.dataset.s);await patch(m.id,{starred:!m.starred});return route()}
@@ -207,7 +267,7 @@ document.addEventListener('click',async e=>{const t=e.target,B=s=>t.closest(s);l
  if(B('#sp')){const er=$('#perr');er.textContent='';const nm=$('#pn').value.trim(),em=$('#pe2').value.trim();if(nm.length<2){er.textContent='Name must be at least 2 characters.';return}if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){er.textContent='Please enter a valid email address.';return}const r=await J('profile','PUT',{name:nm,title:$('#pt').value,bio:$('#pb').value,email:em,phone:$('#pp').value,whatsapp:$('#pw').value,linkedin:$('#pl').value,location:$('#ploc').value});if(!r.ok){er.textContent=r.error||'Could not save profile.';return}PROF=r.profile;return toast('Profile saved.')}
  if(B('#cs')){const ce=$('#ce');ce.textContent='';const cp=$('#cp').value,np=$('#np').value,nc=$('#nc').value,nu=$('#nu').value.trim();if(np!==nc){ce.textContent='New passwords do not match.';return}if(np.length<6){ce.textContent='Password must be at least 6 characters.';return}if(nu.length<2){ce.textContent='Username must be at least 2 characters.';return}const r=await J('credentials','POST',{currentPassword:cp,username:nu,password:np});if(!r.ok){ce.textContent=r.error||'Could not save.';return}alert('Sign-in updated. Please sign in again with your new username and password.');return signout()}
  if(B('#csv')||B('#jsn')){const j=!!B('#jsn'),r=await api(j?'export.json':'export.csv'),a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());a.download=j?'portfolio-backup.json':'messages.csv';a.click()}});
-document.addEventListener('change',e=>{if(e.target.id==='sv'){SVC=e.target.value;msgs()}});
+document.addEventListener('change',e=>{if(e.target.id==='sv'){SVC=e.target.value;msgs()}if(e.target.dataset.cs!==undefined){IDEAS[+e.target.dataset.cs].status=e.target.value;saveIdeas();content()}});
 let nt;document.addEventListener('input',e=>{if(e.target.id==='nt'){clearTimeout(nt);nt=setTimeout(()=>patch(e.target.dataset.id,{note:e.target.value}).then(()=>toast('Note saved')),700)}});
 document.addEventListener('mousemove',e=>{const sv=e.target.closest?.('.chart svg');if(!sv)return;const r=sv.getBoundingClientRect(),d=JSON.parse(sv.dataset.ser),i=Math.max(0,Math.min(d.length-1,Math.round(((e.clientX-r.left)/r.width*700-28)/644*(d.length-1)))),tp=sv.nextElementSibling;tp.style.left=(28+i*644/(d.length-1))/700*r.width+'px';tp.style.top='30px';tp.style.opacity=1;tp.textContent=`${d[i][0]}: ${d[i][1]} views, ${d[i][2]} visitors`});
 document.addEventListener('mouseout',e=>{if(e.target.closest?.('.chart'))$$('.tip').forEach(t=>t.style.opacity=0)});
@@ -215,6 +275,8 @@ $('#q').oninput=msgs;$('#out').onclick=signout;$('#vs').onclick=()=>open('/','_b
 $('#th').onclick=()=>{const d=document.documentElement.dataset.t==='dark'?'light':'dark';document.documentElement.dataset.t=d;localStorage.setItem('adm-t',d)};
 $('#lf').onsubmit=async e=>{e.preventDefault();$('#le').textContent='';const r=await fetch('/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('#u').value,password:$('#p').value})}),d=await r.json();
  if(!d.ok){$('#le').textContent=d.error;return}T=d.token;USER=d.username;sessionStorage.setItem('t',T);sessionStorage.setItem('u',USER);load()};
+applyAccent(localStorage.getItem('adm-accent')||'green');
+clockTick();setInterval(clockTick,20000);updBadges();
 setInterval(()=>{if(T&&!document.hidden)api('messages').then(r=>r.json()).then(d=>{if(d.messages.length>ALL.length){toast('New message received');load()}}).catch(()=>{})},45000);
 if(T)load().catch(()=>{});
 </script></body></html>
