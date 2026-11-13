@@ -510,10 +510,15 @@ a,button{transition:color .25s,background-color .25s,border-color .25s,box-shado
 }
 
 /* ===== Welcome splash overlay + flying aeroplane ===== */
-.splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:1rem;background:rgba(5,8,15,.55);backdrop-filter:blur(14px) saturate(1.25);-webkit-backdrop-filter:blur(14px) saturate(1.25);cursor:pointer;transition:opacity .6s var(--ease),visibility .6s}
+.splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:1rem;background:#05080f;cursor:pointer;transition:opacity .6s var(--ease),visibility .6s}
 .splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.splash-card{position:relative;z-index:2;cursor:default;text-align:center;max-width:560px;width:min(560px,92vw);background:linear-gradient(160deg,#0e1830f2,#0a0f1cf2);border:1px solid #ffffff22;border-radius:28px;padding:2.6rem 2.2rem 2.2rem;box-shadow:0 40px 90px #00000080,0 0 0 1px #22c55e22,0 0 60px #22c55e14;animation:splashIn .7s var(--ease) both;transition:transform .6s var(--ease),opacity .6s}
-.splash.hidden .splash-card{transform:scale(.92) translateY(12px);opacity:0}
+.splash-card{position:relative;z-index:2;cursor:default;text-align:center;max-width:560px;width:min(560px,92vw);background:linear-gradient(160deg,#0e1830f2,#0a0f1cf2);border:1px solid #ffffff22;border-radius:28px;padding:2.6rem 2.2rem 2.2rem;box-shadow:0 40px 90px #00000080,0 0 0 1px #22c55e22,0 0 60px #22c55e14;animation:splashIn .7s var(--ease) both}
+.splash.closing .splash-card{animation:paperClose .9s cubic-bezier(.5,.05,.3,1) forwards}
+@keyframes paperClose{
+ 0%{opacity:1;transform:perspective(900px) rotateX(0) translateY(0) scale(1)}
+ 35%{opacity:1;transform:perspective(900px) rotateX(28deg) translateY(-30px) scale(.97)}
+ 100%{opacity:0;transform:perspective(900px) rotateX(55deg) translate(24vw,-105vh) scale(.55)}
+}
 @keyframes splashIn{from{opacity:0;transform:scale(.94) translateY(16px)}to{opacity:1;transform:none}}
 .splash-line1{margin:0;font:800 clamp(1.9rem,5vw,2.7rem)/1.1 "Bricolage Grotesque";color:#fff;letter-spacing:-.02em}
 .splash-line2{margin:.7rem 0 0;font:700 .82rem "DM Sans";letter-spacing:.24em;text-transform:uppercase;color:var(--acc)}
@@ -637,3 +642,21 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 .sys-steps p{margin:0;font-size:.86rem;color:#c4cde4}
 @media(max-width:900px){.sys-steps{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.sys-steps{grid-template-columns:1fr}}
+
+/* ===== 10-second countdown after welcome ===== */
+.countdown{position:fixed;inset:0;z-index:210;display:grid;place-items:center;align-content:center;gap:1.4rem;background:#05080f;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),visibility .45s}
+.countdown.show{opacity:1;visibility:visible;pointer-events:auto}
+.cd-ring{position:relative;width:170px;height:170px}
+.cd-ring svg{width:100%;height:100%;display:block;transform:rotate(-90deg)}
+.cd-bg{fill:none;stroke:#ffffff1a;stroke-width:7}
+.cd-fg{fill:none;stroke:var(--acc);stroke-width:7;stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:0;filter:drop-shadow(0 0 10px #22c55eaa);transition:stroke-dashoffset 1s linear}
+.cd-num{position:absolute;inset:0;display:grid;place-items:center;font:800 4.2rem/1 "Bricolage Grotesque";color:#fff;text-shadow:0 0 30px #22c55e66}
+.cd-num.pop{animation:cdPop .55s var(--ease)}
+@keyframes cdPop{0%{transform:scale(1.45);opacity:0}60%{transform:scale(.96);opacity:1}100%{transform:scale(1);opacity:1}}
+.cd-label{margin:0;font:700 .85rem "DM Sans";letter-spacing:.26em;text-transform:uppercase;color:var(--acc);animation:cdPulse 1.2s ease-in-out infinite}
+@keyframes cdPulse{50%{opacity:.55}}
+@media(prefers-reduced-motion:reduce){
+ .splash.closing .splash-card{animation:none}
+ .cd-num.pop{animation:none}
+ .cd-label{animation:none}
+}
