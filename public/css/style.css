@@ -621,3 +621,19 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 .plat.yt{background:#ff00001a;color:#ff6b6b;border:1px solid #ff000044}
 @media(max-width:900px){.reviews{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.reviews{grid-template-columns:1fr}}
+
+/* ===== Review stars ===== */
+.stars{display:flex;gap:.25rem;margin:.6rem 0 .2rem;color:#f5b301}
+.stars .st{width:18px;height:18px;flex:none;filter:drop-shadow(0 1px 3px #f5b30155)}
+
+/* ===== Content system inside Reviews ===== */
+.rv-system{margin-top:2.2rem;background:var(--navy);border:1px solid #22c55e33;border-radius:20px;padding:1.8rem 1.8rem 1.5rem}
+.rv-system h3{color:#fff;font-size:1.35rem;margin:0 0 .3rem}
+.rv-system .mut{color:#c4cde4;margin:0 0 1.2rem}
+.sys-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+.sys-steps>div{background:#ffffff08;border:1px solid #ffffff14;border-radius:14px;padding:1rem .9rem}
+.sys-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--acc);color:#04120a;font:800 .85rem "DM Sans";margin-bottom:.5rem}
+.sys-steps b{display:block;color:#fff;font-size:.98rem;margin-bottom:.25rem}
+.sys-steps p{margin:0;font-size:.86rem;color:#c4cde4}
+@media(max-width:900px){.sys-steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.sys-steps{grid-template-columns:1fr}}
