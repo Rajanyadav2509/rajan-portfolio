@@ -36,6 +36,68 @@ const bump = (e, extra) => { const d = (AND.days[dayKey()] ||= {}); d[e] = (d[e]
 const read = () => { try { return JSON.parse(fs.readFileSync(DB, 'utf8')); } catch { return []; } };
 const write = (rows) => { const t = DB + '.tmp'; fs.writeFileSync(t, JSON.stringify(rows, null, 2)); fs.renameSync(t, DB); };
 
+// ---------- messages store: PostgreSQL when DATABASE_URL is set, else the JSON file ----------
+// The JSON file lives on Render's ephemeral disk, so it is wiped on every redeploy.
+// A Render PostgreSQL database (free tier) keeps form messages permanently.
+const DATABASE_URL = process.env.DATABASE_URL || '';
+let pool = null, usePostgres = false;
+const dbReady = (async () => {
+  if (!DATABASE_URL) return false;
+  try {
+    const { Pool } = require('pg');
+    pool = new Pool({ connectionString: DATABASE_URL, ssl: { rejectUnauthorized: false } });
+    await pool.query('SELECT 1');
+    await pool.query(`CREATE TABLE IF NOT EXISTS messages (
+      id TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT, service TEXT,
+      message TEXT, "read" BOOLEAN NOT NULL DEFAULT FALSE, status TEXT NOT NULL DEFAULT 'new',
+      starred BOOLEAN NOT NULL DEFAULT FALSE, note TEXT NOT NULL DEFAULT '',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`);
+    // One-time migration: if Postgres is empty but the JSON file has messages, copy them over.
+    const existing = await pool.query('SELECT COUNT(*) AS c FROM messages');
+    if (Number(existing.rows[0].c) === 0) {
+      const old = read();
+      for (const r of old) {
+        await pool.query('INSERT INTO messages (id, name, email, phone, service, message, "read", status, starred, note, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (id) DO NOTHING',
+          [r.id, r.name, r.email, r.phone, r.service, r.message, !!r.read, r.status || 'new', !!r.starred, r.note || '', r.createdAt || new Date().toISOString()]);
+      }
+      if (old.length) console.log(`Migrated ${old.length} message(s) from the JSON file into PostgreSQL`);
+    }
+    usePostgres = true;
+    console.log('Messages stored in PostgreSQL');
+    return true;
+  } catch (e) {
+    console.error('PostgreSQL unavailable, using JSON file for messages:', e.message);
+    pool = null; usePostgres = false;
+    return false;
+  }
+})();
+const dbRead = async () => {
+  await dbReady;
+  if (usePostgres && pool) {
+    const r = await pool.query('SELECT id, name, email, phone, service, message, "read", status, starred, note, created_at FROM messages ORDER BY created_at DESC');
+    return r.rows.map(x => ({ id: x.id, name: x.name, email: x.email, phone: x.phone, service: x.service, message: x.message, read: x.read, status: x.status, starred: x.starred, note: x.note, createdAt: x.created_at instanceof Date ? x.created_at.toISOString() : x.created_at }));
+  }
+  return read();
+};
+const dbWrite = async (rows) => {
+  await dbReady;
+  if (usePostgres && pool) {
+    const c = await pool.connect();
+    try {
+      await c.query('BEGIN');
+      await c.query('DELETE FROM messages');
+      for (const r of rows) {
+        await c.query('INSERT INTO messages (id, name, email, phone, service, message, "read", status, starred, note, created_at) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',
+          [r.id, r.name, r.email, r.phone, r.service, r.message, !!r.read, r.status || 'new', !!r.starred, r.note || '', r.createdAt || new Date().toISOString()]);
+      }
+      await c.query('COMMIT');
+    } catch (e) { await c.query('ROLLBACK'); throw e; } finally { c.release(); }
+    return;
+  }
+  write(rows);
+};
+
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -80,7 +142,7 @@ setInterval(() => hits.clear(), 3600e3).unref();
 
 // ---------- public: contact form ----------
 const clean = (s, n) => String(s || '').replace(/[<>]/g, '').trim().slice(0, n);
-app.post('/api/contact', limit(5, 10 * 60e3), (req, res) => {
+app.post('/api/contact', limit(5, 10 * 60e3), async (req, res) => {
   const b = req.body || {};
   if (b.website) return res.json({ ok: true }); // honeypot: bots fill this hidden field
   const m = { name: clean(b.name, 80), email: clean(b.email, 120), phone: clean(b.phone, 30),
@@ -89,13 +151,13 @@ app.post('/api/contact', limit(5, 10 * 60e3), (req, res) => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return res.status(400).json({ ok: false, error: 'Please enter a valid email address.' });
   if (m.phone.replace(/[^0-9]/g, '').length < 6) return res.status(400).json({ ok: false, error: 'Please enter your phone number.' });
   if (m.message.length < 10) return res.status(400).json({ ok: false, error: 'Please write a message of at least 10 characters.' });
-  const rows = read();
+  const rows = await dbRead();
   // One submission per email or name: always use a new email or name
   const em = m.email.toLowerCase(), nm = m.name.toLowerCase();
   if (rows.some(r => (r.email || '').toLowerCase() === em)) return res.status(400).json({ ok: false, error: 'This email has already sent a message. Please use a different email address.' });
   if (rows.some(r => (r.name || '').toLowerCase() === nm)) return res.status(400).json({ ok: false, error: 'This name has already sent a message. Please use a different name.' });
   rows.unshift({ id: crypto.randomUUID(), ...m, read: false, status: 'new', starred: false, note: '', createdAt: new Date().toISOString() });
-  write(rows); bump('form');
+  await dbWrite(rows); bump('form');
   res.json({ ok: true });
 });
 
@@ -140,24 +202,24 @@ app.post('/api/admin/credentials', auth, limit(5, 15 * 60e3), (req, res) => {
   sessions.clear();
   res.json({ ok: true, username: user });
 });
-app.get('/api/admin/messages', auth, (req, res) => res.json({ ok: true, messages: read() }));
+app.get('/api/admin/messages', auth, async (req, res) => res.json({ ok: true, messages: await dbRead() }));
 const STATUSES = ['new', 'in_progress', 'replied', 'closed'];
-app.patch('/api/admin/messages/:id', auth, (req, res) => {
-  const rows = read(), r = rows.find(x => x.id === req.params.id), b = req.body || {};
+app.patch('/api/admin/messages/:id', auth, async (req, res) => {
+  const rows = await dbRead(), r = rows.find(x => x.id === req.params.id), b = req.body || {};
   if (!r) return res.status(404).json({ ok: false, error: 'Message not found.' });
   if ('read' in b) r.read = !!b.read; if ('starred' in b) r.starred = !!b.starred;
   if (STATUSES.includes(b.status)) r.status = b.status; if ('note' in b) r.note = clean(b.note, 2000);
-  write(rows); res.json({ ok: true });
+  await dbWrite(rows); res.json({ ok: true });
 });
-app.post('/api/admin/messages/bulk', auth, (req, res) => {
+app.post('/api/admin/messages/bulk', auth, async (req, res) => {
   const { ids, action, value } = req.body || {}; if (!Array.isArray(ids)) return res.status(400).json({ ok: false });
-  const set = new Set(ids.map(String)); let rows = read();
+  const set = new Set(ids.map(String)); let rows = await dbRead();
   if (action === 'delete') rows = rows.filter(r => !set.has(r.id));
   else rows.forEach(r => { if (!set.has(r.id)) return; if (action === 'read') r.read = true; else if (action === 'unread') r.read = false; else if (action === 'star') r.starred = true; else if (action === 'unstar') r.starred = false; else if (action === 'status' && STATUSES.includes(value)) r.status = value; });
-  write(rows); res.json({ ok: true });
+  await dbWrite(rows); res.json({ ok: true });
 });
-app.get('/api/admin/stats', auth, (req, res) => {
-  const n = Math.min(Math.max(parseInt(req.query.days) || 30, 7), 365), msgs = read(), by = {}, refs = {}, dev = {}, series = [];
+app.get('/api/admin/stats', auth, async (req, res) => {
+  const n = Math.min(Math.max(parseInt(req.query.days) || 30, 7), 365), msgs = await dbRead(), by = {}, refs = {}, dev = {}, series = [];
   msgs.forEach(m => { const k = dayKey(new Date(m.createdAt)); by[k] = (by[k] || 0) + 1; });
   for (let i = n - 1; i >= 0; i--) { const k = dayKey(new Date(Date.now() - i * 864e5)), d = AND.days[k] || {};
     series.push({ d: k, view: d.view || 0, visit: d.visit || 0, wa: d.wa || 0, resume: d.resume || 0, email: d.email || 0, phone: d.phone || 0, cta: d.cta || 0, msgs: by[k] || 0 });
@@ -185,11 +247,11 @@ app.put('/api/admin/settings', auth, (req, res) => {
   writeJ(ST, s); res.json({ ok: true, settings: s });
 });
 app.post('/api/admin/logout', auth, (req, res) => { sessions.delete((req.get('authorization') || '').replace('Bearer ', '')); res.json({ ok: true }); });
-app.get('/api/admin/export.json', auth, (req, res) => res.set('Content-Disposition', 'attachment; filename=portfolio-backup.json').json({ exportedAt: new Date().toISOString(), messages: read(), analytics: AND, settings: getSettings() }));
-app.delete('/api/admin/messages/:id', auth, (req, res) => { write(read().filter(x => x.id !== req.params.id)); res.json({ ok: true }); });
-app.get('/api/admin/export.csv', auth, (req, res) => {
+app.get('/api/admin/export.json', auth, async (req, res) => res.set('Content-Disposition', 'attachment; filename=portfolio-backup.json').json({ exportedAt: new Date().toISOString(), messages: await dbRead(), analytics: AND, settings: getSettings() }));
+app.delete('/api/admin/messages/:id', auth, async (req, res) => { await dbWrite((await dbRead()).filter(x => x.id !== req.params.id)); res.json({ ok: true }); });
+app.get('/api/admin/export.csv', auth, async (req, res) => {
   const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const csv = ['Date,Name,Email,Phone,Service,Status,Starred,Message,Note', ...read().map(r => [r.createdAt, r.name, r.email, r.phone, r.service, r.status || 'new', r.starred ? 'yes' : '', r.message, r.note].map(q).join(','))].join('\n');
+  const csv = ['Date,Name,Email,Phone,Service,Status,Starred,Message,Note', ...(await dbRead()).map(r => [r.createdAt, r.name, r.email, r.phone, r.service, r.status || 'new', r.starred ? 'yes' : '', r.message, r.note].map(q).join(','))].join('\n');
   res.type('text/csv').set('Content-Disposition', 'attachment; filename=messages.csv').send(csv);
 });
 
