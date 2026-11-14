@@ -197,8 +197,8 @@ app.get('/api/admin/export.csv', auth, (req, res) => {
 app.get('/admin', (req, res) => { res.set('X-Robots-Tag', 'noindex, nofollow'); res.sendFile(path.join(__dirname, 'admin', 'index.html')); });
 
 // ---------- SEO files ----------
-app.get('/robots.txt', (req, res) => res.type('text/plain').send(`User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nSitemap: ${SITE_URL}/sitemap.xml\n`));
-app.get('/sitemap.xml', (req, res) => res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE_URL}/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url></urlset>`));
+// sitemap.xml and robots.txt are served as static files from public/ (no dynamic routes),
+// so both Vercel and Render serve the same two-page sitemap and robots file.
 
 const ASSET_V = String(Date.now());
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '7d', index: false }));
