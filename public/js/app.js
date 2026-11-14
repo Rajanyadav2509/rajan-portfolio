@@ -55,8 +55,11 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  $$('h2').forEach(x=>x.classList.add('rv'));
  $$('.rv:not(.in)').forEach(x=>io.observe(x));
  const links=$$('#menu a[href^="#"]:not(.btn)'),secs=links.map(a=>$(a.getAttribute('href'))).filter(Boolean);
- const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+ let navClickAt=0;
+ const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&Date.now()-navClickAt>1200)links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
  secs.forEach(s=>so.observe(s));
+ // Tap a nav link: highlight it at once, exactly like the others (don't wait for the scroll observer)
+ links.forEach(a=>a.addEventListener('click',()=>{navClickAt=Date.now();links.forEach(x=>x.classList.remove('active'));a.classList.add('active')}));
 })();
 
 // nav gets a solid state after scrolling
@@ -149,9 +152,3 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
  enter.focus();
 })();
 
-// Dark / light mode toggle (floating button, bottom-left; choice saved in localStorage)
-(()=>{const b=document.getElementById('themeFab');if(!b)return;
- const apply=m=>{const light=m==='light';document.body.classList.toggle('light',light);b.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');try{localStorage.setItem('theme',m)}catch{}};
- try{if(localStorage.getItem('theme')==='light')apply('light')}catch{}
- b.addEventListener('click',()=>{apply(document.body.classList.contains('light')?'dark':'light')});
-})();
