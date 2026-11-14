@@ -478,7 +478,7 @@ a,button{transition:color .25s,background-color .25s,border-color .25s,box-shado
 /* welcome card: first thing in the hero, above the headline */
 .welcome{position:relative;background:linear-gradient(120deg,#12264fd9,#0a1a3ad9);backdrop-filter:blur(10px);border:1px solid #ffffff1f;border-left:3px solid var(--acc);border-radius:16px;padding:1rem 1.3rem;margin-bottom:1.2rem;box-shadow:0 16px 40px #00000040;animation:rise .8s both}
 .welcome-line1{margin:0;font:800 1.35rem "Bricolage Grotesque";color:#fff;letter-spacing:-.01em;line-height:1.15}
-.welcome-line2{margin:.3rem 0 0;font:700 .78rem "DM Sans";letter-spacing:.22em;text-transform:uppercase;color:var(--acc)}
+.welcome-line2{margin:.3rem 0 0;font:700 .78rem "DM Sans";letter-spacing:.22em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
 /* client profiles: full animated cards (spotlight + top line + tilt + stagger) */
 .client{position:relative}
 .client::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),#22c55e24,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
@@ -503,6 +503,7 @@ a,button{transition:color .25s,background-color .25s,border-color .25s,box-shado
 .total:hover{transform:translateY(-4px) rotate(-.2deg)}
 @media(max-width:520px){
  .welcome-line1{font-size:1.15rem}
+ .welcome-line2{font-size:.66rem;letter-spacing:.13em}
  .cb{padding:1.2rem}
 }
 @media(prefers-reduced-motion:reduce){
