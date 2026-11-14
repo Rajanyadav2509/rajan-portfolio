@@ -797,3 +797,9 @@ body.light .badge{color:var(--ink);background:#0f172a0d;border-color:#0f172a26}
 body.light .role{color:var(--mut)}
 body.light .role b{color:#15803d}
 body.light .rot{color:#15803d;border-right-color:#15803d}
+
+/* ===== Light mode: bottom part (Contact + Education) text must be clearly visible ===== */
+body.light .lead{color:#334155}
+body.light #education .yr{color:#15803d}
+body.light .pill{color:#15803d}
+body.light .dark .eyebrow{color:#15803d}
