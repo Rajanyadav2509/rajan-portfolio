@@ -16,6 +16,12 @@ body{color:#e8edf7;font-family:"DM Sans",system-ui,sans-serif}
 .form label.full{grid-column:1/-1}
 .form input,.form select,.form textarea{background:#061230;border:1.5px solid #ffffff22;border-radius:14px;color:#e8edf7;padding:.85rem 1rem;font:inherit;width:100%}
 .form .form-sub{grid-column:1/-1;margin:-.4rem 0 .4rem;color:#9aa7c7;font-size:.98rem}
+.form .human-check{background:#061230;border:1.5px solid #ffffff22;border-radius:14px;padding:1rem 1.1rem;display:grid;gap:.7rem}
+.form .human-row{display:flex;align-items:center;gap:.6rem;font-weight:700;color:#e8edf7;cursor:pointer}
+.form .human-row input{width:20px;height:20px;accent-color:#22c55e;cursor:pointer;flex:none;padding:0;background:transparent;border:0}
+.form .human-math{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-weight:600;color:#c4cde4}
+.form .human-math input{width:90px;padding:.6rem .8rem;background:#0a1a3a;border:1.5px solid #ffffff22;border-radius:10px;color:#e8edf7;font:inherit}
+.form .human-check.invalid{border-color:#b3282d}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .btn{display:inline-block;font:700 1rem "DM Sans",sans-serif;border:2px solid transparent;border-radius:999px;padding:.85rem 1.7rem;text-decoration:none;cursor:pointer}
 .btn.gold{background:#22c55e;color:#0a1e42}
@@ -52,10 +58,14 @@ body::after{width:480px;height:480px;right:-140px;bottom:-160px;background:radia
 <h1>Let&rsquo;s talk</h1>
 <p class="connect-sub">Social Media Manager Portfolio</p>
 <form id="cf" class="form" novalidate><p class="form-sub">I reply within one working day.</p><label>Name<input name="name" required autocomplete="name" maxlength="80" placeholder="Your name"></label><label>Email<input name="email" type="email" required autocomplete="email" maxlength="120" placeholder="you@email.com"></label>
-<label>Phone (optional)<input name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="Optional"></label>
+<label>Phone<input name="phone" type="tel" required autocomplete="tel" maxlength="30" placeholder="Your phone number"></label>
 <label>I need help with<select name="service"><option>LinkedIn content and management</option><option>Carousel design</option><option>YouTube SEO packs</option><option>Personal branding</option><option>Newsletter and Substack</option><option>Something else</option></select></label>
 <label class="full">Message<textarea name="message" rows="4" required minlength="10" maxlength="2000" placeholder="Tell me about your LinkedIn or YouTube goals&hellip;"></textarea></label>
 <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+<div class="human-check" style="grid-column:1/-1">
+<label class="human-row" for="notRobot"><input type="checkbox" id="notRobot"> <span>I&apos;m not a robot</span></label>
+<div class="human-math"><span>Prove you&apos;re human: what is <b id="mathQ">3 + 4</b>?</span> <input id="mathA" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="Answer" aria-label="Answer the maths question"></div>
+</div>
 <button class="btn gold" id="send" style="grid-column:1/-1">Send message</button><p id="fs" role="status" aria-live="polite" style="grid-column:1/-1"></p></form>
 <a class="connect-back" href="/">&larr; Back to portfolio</a>
 </div>
