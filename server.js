@@ -87,8 +87,13 @@ app.post('/api/contact', limit(5, 10 * 60e3), (req, res) => {
               service: clean(b.service, 60), message: clean(b.message, 2000) };
   if (m.name.length < 2) return res.status(400).json({ ok: false, error: 'Please enter your name.' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) return res.status(400).json({ ok: false, error: 'Please enter a valid email address.' });
+  if (m.phone.replace(/[^0-9]/g, '').length < 6) return res.status(400).json({ ok: false, error: 'Please enter your phone number.' });
   if (m.message.length < 10) return res.status(400).json({ ok: false, error: 'Please write a message of at least 10 characters.' });
   const rows = read();
+  // One submission per email or name: always use a new email or name
+  const em = m.email.toLowerCase(), nm = m.name.toLowerCase();
+  if (rows.some(r => (r.email || '').toLowerCase() === em)) return res.status(400).json({ ok: false, error: 'This email has already sent a message. Please use a different email address.' });
+  if (rows.some(r => (r.name || '').toLowerCase() === nm)) return res.status(400).json({ ok: false, error: 'This name has already sent a message. Please use a different name.' });
   rows.unshift({ id: crypto.randomUUID(), ...m, read: false, status: 'new', starred: false, note: '', createdAt: new Date().toISOString() });
   write(rows); bump('form');
   res.json({ ok: true });
