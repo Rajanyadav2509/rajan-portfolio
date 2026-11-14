@@ -644,37 +644,34 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 @media(max-width:520px){.sys-steps{grid-template-columns:1fr}}
 
 /* ===== 5-second countdown after welcome ===== */
-.countdown{position:fixed;inset:0;z-index:210;display:grid;place-items:center;align-content:center;gap:1.4rem;background:radial-gradient(ellipse at 50% 0%,#1c150a 0%,#0b0804 48%,#050403 100%);overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),visibility .45s}
+.countdown{position:fixed;inset:0;z-index:210;display:grid;place-items:center;align-content:center;gap:1.4rem;background:radial-gradient(ellipse at 50% 0%,#0a1e42 0%,#061230 45%,#020617 100%);overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),visibility .45s}
 .countdown::before,.countdown::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
-.countdown::before{width:560px;height:560px;left:50%;top:-180px;margin-left:-280px;background:radial-gradient(circle,#f5c54230,transparent 65%);animation:cdFloat1 9s ease-in-out infinite}
-.countdown::after{width:480px;height:480px;right:-140px;bottom:-160px;background:radial-gradient(circle,#1d4ed866,transparent 65%);animation:cdFloat2 11s ease-in-out infinite}
+.countdown::before{width:560px;height:560px;left:50%;top:-180px;margin-left:-280px;background:radial-gradient(circle,#3b82f633,transparent 65%);animation:cdFloat1 9s ease-in-out infinite}
+.countdown::after{width:480px;height:480px;right:-140px;bottom:-160px;background:radial-gradient(circle,#0ea5e955,transparent 65%);animation:cdFloat2 11s ease-in-out infinite}
 @keyframes cdFloat1{50%{transform:translate(40px,30px) scale(1.12)}}
 @keyframes cdFloat2{50%{transform:translate(-50px,-30px) scale(1.1)}}
 
-/* ===== Premium countdown background: golden rays + starfield + bokeh + mist + beam + frame ===== */
-.cd-rays{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.cd-ray{position:absolute;top:-12%;height:125%;margin-left:-32px;background:linear-gradient(180deg,#ffe9a8cc 0%,#f5c54255 35%,#f5c54211 60%,transparent 80%);filter:blur(7px);transform:rotate(var(--r,0deg));transform-origin:top center;animation:cdRay 5s ease-in-out infinite alternate}
-@keyframes cdRay{from{opacity:.5}to{opacity:1}}
+/* ===== Blue countdown background: starfield + blue bokeh + glow + beam (animation running) ===== */
 .cd-stars{position:absolute;inset:0;pointer-events:none;z-index:0}
-.cd-stars span{position:absolute;width:var(--s,3px);height:var(--s,3px);border-radius:50%;background:#fff;box-shadow:0 0 8px 2px #ffffff88,0 0 18px 4px #f5c54244;animation:cdTwinkle 3s ease-in-out infinite;animation-delay:var(--d,0s)}
-.cd-stars span:nth-child(even){background:#bfdbfe;box-shadow:0 0 8px 2px #93c5fd88,0 0 18px 4px #38bdf844}
+.cd-stars span{position:absolute;width:var(--s,3px);height:var(--s,3px);border-radius:50%;background:#dbeafe;box-shadow:0 0 8px 2px #93c5fd99,0 0 18px 4px #38bdf855;animation:cdTwinkle 3s ease-in-out infinite;animation-delay:var(--d,0s)}
+.cd-stars span:nth-child(3n){background:#fff;box-shadow:0 0 10px 2px #ffffffaa,0 0 22px 5px #7dd3fc55}
 @keyframes cdTwinkle{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}
 .cd-bokeh{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.cd-bokeh span{position:absolute;width:var(--s,20px);height:var(--s,20px);border-radius:50%;background:radial-gradient(circle,#f5c54288,#f5c54222 55%,transparent 75%);filter:blur(2px);box-shadow:0 0 24px 6px #f5c54233;animation:cdDrift 9s ease-in-out infinite alternate;animation-delay:var(--d,0s)}
-.cd-bokeh span:nth-child(3n){background:radial-gradient(circle,#93c5fd88,#38bdf822 55%,transparent 75%);box-shadow:0 0 24px 6px #38bdf833}
+.cd-bokeh span{position:absolute;width:var(--s,20px);height:var(--s,20px);border-radius:50%;background:radial-gradient(circle,#7dd3fc99,#38bdf833 55%,transparent 75%);filter:blur(2px);box-shadow:0 0 24px 6px #38bdf844;animation:cdDrift 9s ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+.cd-bokeh span:nth-child(3n){background:radial-gradient(circle,#c4b5fd99,#818cf833 55%,transparent 75%);box-shadow:0 0 24px 6px #818cf844}
 @keyframes cdDrift{from{transform:translateY(0)}to{transform:translateY(-46px)}}
-.cd-mist{position:absolute;left:-12%;right:-12%;bottom:-8%;height:38%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 100%,#f5c54240 0%,#d4a0171e 45%,transparent 75%);filter:blur(28px);animation:cdMist 7s ease-in-out infinite alternate}
+.cd-blueglow{position:absolute;left:-12%;right:-12%;bottom:-8%;height:38%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 100%,#38bdf844 0%,#1d4ed822 45%,transparent 75%);filter:blur(28px);animation:cdMist 7s ease-in-out infinite alternate}
 @keyframes cdMist{from{opacity:.7;transform:scaleX(1)}to{opacity:1;transform:scaleX(1.06)}}
-.cd-beam{position:absolute;left:6%;right:6%;bottom:24%;height:2px;pointer-events:none;z-index:0;background:linear-gradient(90deg,transparent,#7dd3fc 30%,#fff 50%,#7dd3fc 70%,transparent);box-shadow:0 0 26px 5px #38bdf866,0 0 60px 14px #38bdf822;animation:cdBeam 3.2s ease-in-out infinite}
-@keyframes cdBeam{0%,100%{opacity:.55}50%{opacity:1}}
-.cd-frame{position:absolute;inset:14px;border:1px solid #d4a01755;border-radius:20px;pointer-events:none;z-index:2;box-shadow:inset 0 0 50px #d4a01711,0 0 34px #d4a01711}
-/* Countdown accent goes gold to match the premium background */
-.countdown .cd-fg{stroke:#e8b64c;filter:drop-shadow(0 0 10px #f5c542aa)}
-.countdown .cd-num{text-shadow:0 0 30px #f5c54288,0 0 60px #f5c54233}
-.countdown .cd-label{color:#e8b64c}
-.countdown .cd-card{border-color:#d4a01744;box-shadow:0 40px 90px #00000080,0 0 0 1px #d4a01733,0 0 60px #d4a01722}
+.cd-beam{position:absolute;left:4%;right:4%;bottom:24%;height:3px;pointer-events:none;z-index:0;background:linear-gradient(90deg,transparent,#7dd3fc 25%,#fff 50%,#7dd3fc 75%,transparent);box-shadow:0 0 30px 6px #38bdf888,0 0 70px 16px #38bdf833;animation:cdBeam 3.2s ease-in-out infinite}
+@keyframes cdBeam{0%,100%{opacity:.6}50%{opacity:1}}
+.cd-frame{position:absolute;inset:14px;border:1px solid #38bdf855;border-radius:20px;pointer-events:none;z-index:2;box-shadow:inset 0 0 50px #38bdf811,0 0 34px #38bdf811}
+/* Countdown accent goes blue to match */
+.countdown .cd-fg{stroke:#38bdf8;filter:drop-shadow(0 0 10px #38bdf8aa)}
+.countdown .cd-num{text-shadow:0 0 30px #38bdf888,0 0 60px #38bdf833}
+.countdown .cd-label{color:#7dd3fc}
+.countdown .cd-card{border-color:#38bdf844;box-shadow:0 40px 90px #00000080,0 0 0 1px #38bdf833,0 0 60px #38bdf822}
 @media(prefers-reduced-motion:reduce){
- .cd-ray,.cd-stars span,.cd-bokeh span,.cd-mist,.cd-beam{animation:none}
+ .cd-stars span,.cd-bokeh span,.cd-blueglow,.cd-beam{animation:none}
 }
 .countdown.show{opacity:1;visibility:visible;pointer-events:auto}
 .cd-ring{position:relative;width:180px;height:180px;z-index:1;animation:cdRingGlow 1.6s ease-in-out infinite}
