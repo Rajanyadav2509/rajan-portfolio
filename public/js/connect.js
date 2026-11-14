@@ -17,11 +17,12 @@ f.addEventListener('submit',async e=>{
   clearTimeout(to);const j=await r.json();
   if(j.ok){
    // Hide the form, show the thank-you card with the welcome-card animation,
-   // then return to the home page after a few seconds
+   // then close it with the same paper-fold animation as the welcome card,
+   // and return to the home page
    $('#formBox').style.display='none';
    const t=$('#thanks');t.classList.add('show');
    t.scrollIntoView({behavior:'smooth',block:'center'});
-   setTimeout(()=>{location.href='/'},5000);
+   setTimeout(()=>{t.classList.add('closing');setTimeout(()=>{location.href='/'},950)},3500);
   }else if(r.status===429){fs.className='bad';fs.textContent='Too many messages sent. Please try again in a few minutes.'}
   else{fs.className='bad';fs.textContent=j.error||'Could not send. Please try again.'}
  }catch{fs.className='bad';fs.textContent='Could not reach the server. Please try again in a few minutes.'}
