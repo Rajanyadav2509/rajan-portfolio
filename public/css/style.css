@@ -594,7 +594,7 @@ svg.ic{width:20px;height:20px;flex:none;color:var(--acc)}
 /* education year + icon */
 .tl .yr{display:inline-flex;align-items:center;gap:.5rem}
 /* contact list */
-.contact li{display:flex;align-items:center;gap:.6rem}
+.contact li{display:flex;align-items:flex-start;gap:.6rem;line-height:1.5}.contact li svg.ic{flex:none;margin-top:.15rem}.contact li span{flex:1;min-width:0}
 .contact li svg.ic{width:18px;height:18px}
 
 /* ===== Education: pronounced left-entry ===== */
