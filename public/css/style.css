@@ -754,3 +754,10 @@ body.portfolio-open .nav,body.portfolio-open footer{animation:portfolioFade .8s 
 .find-links a:hover{color:var(--gold);transform:translateX(4px)}
 .find-links p{margin-top:1rem;color:#aab5d0;line-height:1.6}.find-addr{display:flex;align-items:flex-start;gap:.6rem}.find-addr svg.ic{flex:none;width:18px;height:18px;margin-top:.15rem}.find-addr span{flex:1;min-width:0}
 @media(max-width:760px){.find-grid{grid-template-columns:1fr}.find-map iframe{height:280px}}
+
+/* Contact: info on the left, photo on the right, perfectly set */
+.contact-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:2.4rem;align-items:center}
+.contact-photo{position:relative}
+.contact-photo::before{content:"";position:absolute;inset:8% -6%;background:radial-gradient(ellipse at center,rgba(34,197,94,.35),transparent 70%);filter:blur(28px);border-radius:50%;z-index:0}
+.contact-photo img{position:relative;z-index:1;display:block;width:100%;max-width:360px;margin-left:auto;border-radius:20px;box-shadow:0 20px 50px #00000066}
+@media(max-width:760px){.contact-grid{grid-template-columns:1fr;gap:1.6rem}.contact-photo img{margin:0 auto;max-width:280px}}
