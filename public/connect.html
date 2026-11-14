@@ -5,8 +5,21 @@
 <link rel="icon" href="/images/logo-96.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="/css/style.css"></noscript>
 <style>
+/* Critical CSS: paint the dark starfield instantly, no white flash on slow networks */
+html,body{margin:0;background:#061230}
+body{color:#e8edf7;font-family:"DM Sans",system-ui,sans-serif}
+.form{background:linear-gradient(165deg,#12264ff2,#0a1a3af2);border:1px solid #ffffff1f;border-radius:24px;display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;padding:2rem}
+.form label{display:grid;gap:.3rem;font-weight:600;font-size:.88rem;letter-spacing:.02em;color:#c4cde4}
+.form label.full{grid-column:1/-1}
+.form input,.form select,.form textarea{background:#061230;border:1.5px solid #ffffff22;border-radius:14px;color:#e8edf7;padding:.85rem 1rem;font:inherit;width:100%}
+.form .form-sub{grid-column:1/-1;margin:-.4rem 0 .4rem;color:#9aa7c7;font-size:.98rem}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.btn{display:inline-block;font:700 1rem "DM Sans",sans-serif;border:2px solid transparent;border-radius:999px;padding:.85rem 1.7rem;text-decoration:none;cursor:pointer}
+.btn.gold{background:#22c55e;color:#0a1e42}
+
 /* Connect page: only the form, on the same deep-blue countdown starfield */
 html,body{min-height:100%}
 body{background:radial-gradient(ellipse at 50% 0%,#0a1e42 0%,#061230 45%,#020617 100%);color:var(--tx);font-family:"DM Sans",system-ui,sans-serif;display:grid;place-items:center;padding:1.2rem;position:relative;overflow-x:hidden}
