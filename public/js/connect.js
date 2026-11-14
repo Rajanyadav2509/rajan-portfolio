@@ -2,13 +2,26 @@
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const API='https://rajan-portfolio-38vr.onrender.com';
 const f=$('#cf'),fs=$('#fs');
+// "I'm not a robot" maths question: a fresh sum on every page load
+const mq=$('#mathQ'),ma=$('#mathA'),hc=$('.human-check');
+let mathAns=7;
+const newSum=()=>{const a=2+Math.floor(Math.random()*8),b=2+Math.floor(Math.random()*8);mathAns=a+b;if(mq)mq.textContent=a+' + '+b;if(ma)ma.value=''};
+newSum();
 f.addEventListener('submit',async e=>{
  e.preventDefault();fs.className='';fs.textContent='';
  const d=Object.fromEntries(new FormData(f));let bad=false;
  $$('input,textarea',f).forEach(i=>i.classList.remove('invalid'));
+ if(hc)hc.classList.remove('invalid');
  if(d.name.trim().length<2){f.name.classList.add('invalid');bad=true}
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)){f.email.classList.add('invalid');bad=true}
+ if((d.phone||'').replace(/[^0-9]/g,'').length<6){f.phone.classList.add('invalid');bad=true}
  if(d.message.trim().length<10){f.message.classList.add('invalid');bad=true}
+ // "I'm not a robot": the box must be ticked and the sum must be right
+ const nr=$('#notRobot'),ans=ma?ma.value.trim():'';
+ if(!nr||!nr.checked||ans===''||+ans!==mathAns){
+  if(hc)hc.classList.add('invalid');bad=true;
+  if(ans!==''&&+ans!==mathAns)newSum();
+ }
  if(bad){fs.className='bad';fs.textContent='Please fix the highlighted fields.';return}
  const b=$('#send');b.disabled=true;b.textContent='Sending...';
  try{
