@@ -31,7 +31,7 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 $$('.rv,.total,.stats').forEach(x=>io.observe(x));$('#yr').textContent=new Date().getFullYear();
 // contact form -> Render API (the Vercel site is static, so the form posts to the Render back-end)
 const API='https://rajan-portfolio-38vr.onrender.com';
-const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefault();fs.className='';fs.textContent='';
+const f=$('#cf'),fs=$('#fs');if(f){f.addEventListener('submit',async e=>{e.preventDefault();fs.className='';fs.textContent='';
  const d=Object.fromEntries(new FormData(f));let bad=false;
  $$('input,textarea',f).forEach(i=>i.classList.remove('invalid'));
  if(d.name.trim().length<2){f.name.classList.add('invalid');bad=true}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)){f.email.classList.add('invalid');bad=true}if(d.message.trim().length<10){f.message.classList.add('invalid');bad=true}
@@ -40,7 +40,7 @@ const f=$('#cf'),fs=$('#fs');f.addEventListener('submit',async e=>{e.preventDefa
  try{const c=new AbortController(),to=setTimeout(()=>c.abort(),20000);const r=await fetch(API+'/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d),signal:c.signal});clearTimeout(to);const j=await r.json();
   if(j.ok){fs.className='ok';fs.textContent='Thank you. Your message is sent and I will reply within one working day.';f.reset()}else if(r.status===429){fs.className='bad';fs.textContent='Too many messages sent. Please try again in a few minutes.'}else{fs.className='bad';fs.textContent=j.error||'Could not send. Please try again.'}}
  catch{fs.className='bad';fs.textContent='Could not reach the server. Please try again in a few minutes.'}
- b.disabled=false;b.textContent='Send message'});
+ b.disabled=false;b.textContent='Send message'});}
 // premium: hero rotating text, scroll progress, portrait tilt
 (()=>{const w=['manage LinkedIn content','design carousels that get saved','write YouTube SEO packs','grow personal brands'],r=$('#rot');let i=0,j=0,del=false;
  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;if(rm){r.textContent=w[0];r.style.animation='none'}else(function t(){const s=w[i];j+=del?-1:1;r.textContent=s.slice(0,j);let d=del?35:70;if(!del&&j===s.length){del=true;d=1600}else if(del&&j===0){del=false;i=(i+1)%w.length;d=300}setTimeout(t,d)})();
