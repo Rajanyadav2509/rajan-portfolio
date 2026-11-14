@@ -22,11 +22,11 @@ body{color:#e8edf7;font-family:"DM Sans",system-ui,sans-serif}
 
 /* Connect page: only the form, on the same deep-blue countdown starfield */
 html,body{min-height:100%}
-body{background:radial-gradient(ellipse at 50% 0%,#0a1e42 0%,#061230 45%,#020617 100%);color:var(--tx);font-family:"DM Sans",system-ui,sans-serif;display:grid;place-items:center;padding:1.2rem;position:relative;overflow-x:hidden}
+body{background:radial-gradient(ellipse at 50% 0%,#0a1e42 0%,#061230 45%,#020617 100%);color:var(--tx);font-family:"DM Sans",system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;min-height:100svh;padding:1.2rem;position:relative;overflow-x:hidden}
 body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0}
 body::before{width:560px;height:560px;left:50%;top:-180px;margin-left:-280px;background:radial-gradient(circle,#3b82f633,transparent 65%);animation:cdFloat1 9s ease-in-out infinite}
 body::after{width:480px;height:480px;right:-140px;bottom:-160px;background:radial-gradient(circle,#0ea5e955,transparent 65%);animation:cdFloat2 11s ease-in-out infinite}
-.connect-wrap{position:relative;z-index:1;width:min(560px,100%);text-align:center}
+.connect-wrap{position:relative;z-index:1;width:min(560px,100%);text-align:center;margin:auto}
 .connect-logo{width:72px;height:72px;border-radius:50%;box-shadow:0 0 0 2px #22c55e44,0 10px 30px #00000080;margin-bottom:.9rem}
 .connect-wrap h1{margin:0 0 .3rem;font:800 1.7rem "Bricolage Grotesque";color:#fff;letter-spacing:-.01em}
 .connect-wrap .connect-sub{margin:0 0 1.4rem;color:#7dd3fc;font-weight:700;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase}
