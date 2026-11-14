@@ -35,7 +35,7 @@ f.addEventListener('submit',async e=>{
    $('#formBox').style.display='none';
    const t=$('#thanks');t.classList.add('show');
    t.scrollIntoView({behavior:'smooth',block:'center'});
-   setTimeout(()=>{t.classList.add('closing');setTimeout(()=>{location.href='/'},950)},3500);
+   setTimeout(()=>{t.classList.add('closing');setTimeout(()=>{location.href='/?skipIntro=1'},950)},3500);
   }else if(r.status===429){fs.className='bad';fs.textContent='Too many messages sent. Please try again in a few minutes.'}
   else{fs.className='bad';fs.textContent=j.error||'Could not send. Please try again.'}
  }catch{fs.className='bad';fs.textContent='Could not reach the server. Please try again in a few minutes.'}

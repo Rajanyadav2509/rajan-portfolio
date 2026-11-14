@@ -124,6 +124,15 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
 // welcome splash overlay + flying aeroplane, then paper-close + 5s countdown
 (()=>{const sp=$('#splash');if(!sp)return;const enter=$('#splashEnter'),plane=$('.splash-plane',sp),cd=$('#countdown'),cdNum=$('#cdNum'),cdFg=$('#cdFg');
  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ // Skip the welcome splash + countdown (used after the Connect thank-you card):
+ // go straight to the portfolio, no intro screens
+ if(new URLSearchParams(location.search).has('skipIntro')){
+  if(cd){cd.classList.remove('show');cd.setAttribute('aria-hidden','true')}
+  sp.classList.add('hidden');document.body.classList.add('portfolio-open');
+  history.replaceState(null,'',location.pathname+location.hash);
+  setTimeout(()=>{sp.remove();if(cd)cd.remove()},50);
+  return;
+ }
  document.body.classList.add('splash-open');
  let gone=false;
  const reveal=()=>{if(!cd)return;cd.classList.remove('show');cd.setAttribute('aria-hidden','true');
