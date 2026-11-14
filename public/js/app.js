@@ -148,3 +148,10 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-jump]');if
  document.addEventListener('keydown',e=>{if(gone)return;if(e.key==='Escape'){clearTimeout(auto);dismiss()}});
  enter.focus();
 })();
+
+// Dark / light mode toggle (floating button, bottom-left; choice saved in localStorage)
+(()=>{const b=document.getElementById('themeFab');if(!b)return;
+ const apply=m=>{const light=m==='light';document.body.classList.toggle('light',light);b.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');try{localStorage.setItem('theme',m)}catch{}};
+ try{if(localStorage.getItem('theme')==='light')apply('light')}catch{}
+ b.addEventListener('click',()=>{apply(document.body.classList.contains('light')?'dark':'light')});
+})();
